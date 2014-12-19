@@ -1,0 +1,22 @@
+{
+  "name": "kit-rpc",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:School-Improvement-Network/kit-rpc.git"
+  },
+  "author": "School Improvement Network",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/School-Improvement-Network/kit-rpc/issues"
+  },
+  "homepage": "https://github.com/School-Improvement-Network/kit-rpc",
+  "devDependencies": {
+    "sinet-coding-conventions": "^1.14.0"
+  }
+}
