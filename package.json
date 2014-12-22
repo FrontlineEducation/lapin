@@ -18,5 +18,11 @@
   "homepage": "https://github.com/School-Improvement-Network/kit-rpc",
   "devDependencies": {
     "sinet-coding-conventions": "^1.14.0"
+  },
+  "dependencies": {
+    "amqplib": "^0.3.0",
+    "bluebird": "^2.4.2",
+    "node-uuid": "^1.4.2",
+    "querystring": "^0.2.0"
   }
 }
