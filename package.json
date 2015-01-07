@@ -17,6 +17,15 @@
   },
   "homepage": "https://github.com/School-Improvement-Network/kit-rpc",
   "devDependencies": {
+    "mocha": "^2.0.1",
+    "should": "^4.4.1",
     "sinet-coding-conventions": "^1.14.0"
+  },
+  "dependencies": {
+    "amqplib": "^0.3.0",
+    "bluebird": "^2.4.2",
+    "lodash": "^2.4.1",
+    "node-uuid": "^1.4.2",
+    "querystring": "^0.2.0"
   }
 }
