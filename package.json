@@ -1,5 +1,5 @@
 {
-  "name": "kit-rpc",
+  "name": "lapin",
   "version": "0.1.0",
   "description": "RPC library for AMQP protocol",
   "main": "index.js",
@@ -8,15 +8,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:School-Improvement-Network/kit-rpc.git"
+    "url": "git@github.com:School-Improvement-Network/lapin.git"
   },
   "author": "School Improvement Network",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/School-Improvement-Network/kit-rpc/issues"
+    "url": "https://github.com/School-Improvement-Network/lapin/issues"
   },
-  "homepage": "https://github.com/School-Improvement-Network/kit-rpc",
+  "homepage": "https://github.com/School-Improvement-Network/lapin",
   "devDependencies": {
     "sinet-coding-conventions": "^1.14.0"
+  },
+  "dependencies": {
+    "rabbus": "^0.2.1"
   }
 }
