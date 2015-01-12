@@ -1,0 +1,23 @@
+language: node_js
+
+node_js:
+  - "0.10.28"
+
+env:
+  global:
+    - NODE_ENV=travis
+
+before_install:
+  - npm install -g npm
+  - npm install -g jshint
+  - npm install -g eslint
+  - npm install -g jscs
+
+install:
+  - npm install
+
+script:
+  - jshint ./
+  - eslint --reset --eslintrc ./
+  - jscs ./
+  - npm test
