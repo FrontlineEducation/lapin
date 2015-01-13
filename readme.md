@@ -1,6 +1,74 @@
+## Lapin wrapper for [RabbitMQ](http://rabbitmq.com/)
+
+Currently this project is using [Rabbus](https://github.com/derickbailey/rabbus) and [Wascally](https://github.com/LeanKit-Labs/wascally). This project is aiming to support several producer / consumer patterns. The following are is a list of the planned patterns, and the checked ones are currently implemented:
+
+* [ ] Send / Receive
+* [ ] Publish / Subscribe
+* [X] Request / Response
+
+The [JSend](http://labs.omniti.com/labs/jsend) specification is required to determine if an error has occurred in a response.
+
+## Installation an usage
+
+As lapin uses wascally you need to install it along with lapin:
+
+```bash
+npm install wascally
+npm install lapin
+```
+
+Require lapin and wascally:
+
+```javascript
+var rabbit = require( 'wascally' );
+var lapin  = require( 'lapin' )( rabbit );
+```
+
+The following is simple usage example:
+
+```javascript
+// Request
+lapin.request( 'users.findAll', options, function ( error, data ) {
+
+	if ( error ) {
+		return next( error );
+	}
+
+	response.send( 200, data );
+
+	next();
+} );
+
+// Response
+lapin.response( 'users.findAll', function ( options, reply ) {
+
+	someDatabaseQuery().success( function ( users ) {
+
+		// JSend success with data
+		reply( {
+			'status' : 'success',
+			'data'   : users
+		} );
+
+	} ).error( function handleError ( error ) {
+
+		// JSend error
+		reply( {
+			'status' : 'error',
+			'data'   : error
+		} );
+
+	} );
+
+} );
+```
+
+## Contributing
 All pull requests must follow [coding conventions and standards](https://github.com/School-Improvement-Network/coding-conventions).
 
-## RPC over RabbitMQ using AMQP
+
+## Additional Information
+#### RPC over RabbitMQ
 
 In general, doing RPC over RabbitMQ is easy. A client sends a request message and a server replies with a response message. In order to receive a response the client needs to send a 'callback' queue address with the request.
 
