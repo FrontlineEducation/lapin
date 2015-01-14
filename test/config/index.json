@@ -1,0 +1,9 @@
+{
+	"connection" : {
+		"server" : "localhost",
+		"port"   : 15672,
+		"vhost"  : "/",
+		"user"   : "guest",
+		"pass"   : "guest"
+	}
+}
