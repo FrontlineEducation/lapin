@@ -4,7 +4,8 @@
   "description": "RPC library for AMQP protocol",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0"
+    "test": "echo \"Error: no test specified\" && exit 0",
+    "postinstall": "cp config/git-hooks/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit"
   },
   "repository": {
     "type": "git",
