@@ -28,7 +28,7 @@ The following is simple usage example:
 
 ```javascript
 // Request
-lapin.request( 'users.findAll', options, function ( error, data ) {
+lapin.request( 'v1.users.findAll', options, function ( error, data ) {
 
 	if ( error ) {
 		return next( error );
@@ -40,7 +40,7 @@ lapin.request( 'users.findAll', options, function ( error, data ) {
 } );
 
 // Response
-lapin.response( 'users.findAll', function ( options, reply ) {
+lapin.response( 'v1.users.findAll', function ( options, reply ) {
 
 	someDatabaseQuery().success( function ( users ) {
 
@@ -79,3 +79,28 @@ In general, doing RPC over RabbitMQ is easy. A client sends a request message an
  * The request is sent to an `rpc_queue` queue.
  * The RPC worker (aka: server) is waiting for requests on that queue. When a message appears, it does the job and sends a message with the result back to the Client, using the queue from the `reply_to` field.
  * The client waits for data on the callback queue. When a message appears, it checks the `correlation_id` property. If it matches the value from the request it returns the response to the application.
+
+## Standards/Conventions
+
+* **messageType:** `<version>`.`<resource>`.`<action>`
+
+* **exchange:** `<pattern>`.`<resource>`-exchange
+
+* **queue:** `<pattern>`.<resource>-queue
+
+###Where
+`Patterns:`
+
+- req-res
+
+- pub-sub
+
+- send-rec
+
+`Version:`
+
+- v1
+
+- v2
+
+- and so on.
