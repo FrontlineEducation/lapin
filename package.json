@@ -1,11 +1,10 @@
 {
   "name": "lapin",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "RPC library for AMQP protocol",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 0",
-    "postinstall": "cp config/git-hooks/pre-commit .git/hooks/ && chmod +x .git/hooks/pre-commit"
+    "test": "echo \"Error: no test specified\" && exit 0"
   },
   "repository": {
     "type": "git",
