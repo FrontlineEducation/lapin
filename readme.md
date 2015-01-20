@@ -28,24 +28,24 @@ The following is simple usage example:
 
 ```javascript
 // Request
-lapin.request( 'v1.users.findAll', options, function ( error, data ) {
+var requester = new lapin.Requester( { 'messageType' : 'v1.users.findAll' } );
+requester.produce( message, function ( error, data ) {
 
 	if ( error ) {
-		return next( error );
+		return reply( error ).code( 500 );
 	}
 
-	response.send( 200, data );
-
-	next();
+	return reply( data.data );
 } );
 
 // Response
-lapin.response( 'v1.users.findAll', function ( options, reply ) {
+var responder = new lapin.Responder( { 'messageType' : 'v1.users.findAll' } );
+responder.consume( function ( message, respond ) {
 
 	someDatabaseQuery().success( function ( users ) {
 
 		// JSend success with data
-		reply( {
+		respond( {
 			'status' : 'success',
 			'data'   : users
 		} );
@@ -53,7 +53,7 @@ lapin.response( 'v1.users.findAll', function ( options, reply ) {
 	} ).error( function handleError ( error ) {
 
 		// JSend error
-		reply( {
+		respond( {
 			'status' : 'error',
 			'data'   : error
 		} );

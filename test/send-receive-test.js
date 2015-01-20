@@ -17,53 +17,53 @@ var Rabbus = require( 'rabbus' );
 var Rabbit = require( 'wascally' );
 var Lapin  = require( '../' )( Rabbit );
 
-describe( 'publisher / subscriber', function () {
+describe( 'sender / receiver', function () {
 
 	var message = { 'foo' : 'bar' };
 	var options = { 'messageType' : 'v1.test.create' };
-	var prefix  = 'pub-sub.';
+	var prefix  = 'send-rec.';
 
-	describe( 'publisher', function () {
+	describe( 'sender', function () {
 
-		var publisher;
+		var sender;
 
 		before( function ( done ) {
 			try {
-				publisher = new Lapin.Publisher( options );
+				sender = new Lapin.Sender( options );
 			} catch ( exception ) {
 				console.error( exception );
 			}
 			done();
 		} );
 
-		it( 'should be an instance of `Rabbus.Publisher`', function ( done ) {
-			expect( publisher ).to.be.instanceof( Rabbus.Publisher );
+		it( 'should be an instance of `Rabbus.Sender`', function ( done ) {
+			expect( sender ).to.be.instanceof( Rabbus.Sender );
 			done();
 		} );
 
-		describe( 'publisher constructor', function () {
+		describe( 'sender constructor', function () {
 
 			it( 'should generate the correct `exchange`', function ( done ) {
 				var parts = options.messageType.split( '.' );
-				expect( publisher.exchange ).to.equal( prefix + parts[ 1 ] + '-exchange' );
+				expect( sender.exchange ).to.equal( prefix + parts[ 1 ] + '-exchange' );
 				done();
 			} );
 
 			it( 'should generate the correct `messageType`', function ( done ) {
-				expect( publisher.messageType ).to.equal( prefix + options.messageType );
+				expect( sender.messageType ).to.equal( prefix + options.messageType );
 				done();
 			} );
 
 		} );
 
-		describe( 'publisher `produce` method', function () {
+		describe( 'sender `produce` method', function () {
 
-			var publishStub;
+			var sendStub;
 
 			before( function ( done ) {
 				try {
-					publisher   = new Lapin.Publisher( options );
-					publishStub = sinon.stub( publisher, 'publish', function () {} );
+					sender   = new Lapin.Sender( options );
+					sendStub = sinon.stub( sender, 'send', function () {} );
 				} catch ( exception ) {
 					console.error( exception );
 				}
@@ -71,13 +71,13 @@ describe( 'publisher / subscriber', function () {
 			} );
 
 			after( function ( done ) {
-				publisher.publish.restore();
+				sender.send.restore();
 				done();
 			} );
 
-			it( 'should invoke `publish` method', function ( done ) {
-				publisher.produce( message, function () {} );
-				expect( publishStub.callCount ).to.equal( 1 );
+			it( 'should invoke `send` method', function ( done ) {
+				sender.produce( message, function () {} );
+				expect( sendStub.callCount ).to.equal( 1 );
 				done();
 			} );
 
@@ -85,53 +85,53 @@ describe( 'publisher / subscriber', function () {
 
 	} );
 
-	describe( 'subscriber', function () {
+	describe( 'receiver', function () {
 
-		var subscriber;
+		var receiver;
 
 		before( function ( done ) {
 			try {
-				subscriber = new Lapin.Subscriber( options );
+				receiver = new Lapin.Receiver( options );
 			} catch ( exception ) {
 				console.error( exception );
 			}
 			done();
 		} );
 
-		it( 'should be an instance of `Rabbus.Subscriber`', function ( done ) {
-			expect( subscriber ).to.be.instanceof( Rabbus.Subscriber );
+		it( 'should be an instance of `Rabbus.Receiver`', function ( done ) {
+			expect( receiver ).to.be.instanceof( Rabbus.Receiver );
 			done();
 		} );
 
-		describe( 'subscriber constructor', function () {
+		describe( 'receiver constructor', function () {
 
 			it( 'should generate the correct `exchange`', function ( done ) {
 				var parts = options.messageType.split( '.' );
-				expect( subscriber.exchange ).to.equal( prefix + parts[ 1 ] + '-exchange' );
+				expect( receiver.exchange ).to.equal( prefix + parts[ 1 ] + '-exchange' );
 				done();
 			} );
 
 			it( 'should generate the correct `queue`', function ( done ) {
 				var parts = options.messageType.split( '.' );
-				expect( subscriber.queue ).to.equal( prefix + parts[ 1 ] + '-queue' );
+				expect( receiver.queue ).to.equal( prefix + parts[ 1 ] + '-queue' );
 				done();
 			} );
 
 			it( 'should generate the correct `messageType`', function ( done ) {
-				expect( subscriber.messageType ).to.equal( prefix + options.messageType );
+				expect( receiver.messageType ).to.equal( prefix + options.messageType );
 				done();
 			} );
 
 		} );
 
-		describe( 'subscriber `consume` method', function () {
+		describe( 'receiver `consume` method', function () {
 
-			var subscribeStub;
+			var receiveStub;
 
 			before( function ( done ) {
 				try {
-					subscriber    = new Lapin.Subscriber( options );
-					subscribeStub = sinon.stub( subscriber, 'subscribe', function () {} );
+					receiver    = new Lapin.Receiver( options );
+					receiveStub = sinon.stub( receiver, 'receive', function () {} );
 				} catch ( exception ) {
 					console.error( exception );
 				}
@@ -139,13 +139,13 @@ describe( 'publisher / subscriber', function () {
 			} );
 
 			after( function ( done ) {
-				subscriber.subscribe.restore();
+				receiver.receive.restore();
 				done();
 			} );
 
-			it( 'should invoke `subscribe` method', function ( done ) {
-				subscriber.consume( function () {} );
-				expect( subscribeStub.callCount ).to.equal( 1 );
+			it( 'should invoke `receive` method', function ( done ) {
+				receiver.consume( function () {} );
+				expect( receiveStub.callCount ).to.equal( 1 );
 				done();
 			} );
 

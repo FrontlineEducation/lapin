@@ -1,21 +1,25 @@
 'use strict';
 
 // Load patterns
-var ReqRes      = require( './lib/req-res' );
-var SendReceive = require( './lib/send-receive' );
+var ReqRes  = require( './lib/req-res' );
+var SendRec = require( './lib/send-receive' );
+var PubSub  = require( './lib/pub-sub' );
 
 module.exports = function Lapin ( Rabbit ) {
 
 	// Initialize patterns
-	var reqres      =  new ReqRes( Rabbit );
-	var sendreceive =  new SendReceive( Rabbit );
+	var reqRes  = new ReqRes( Rabbit );
+	var sendRec = new SendRec( Rabbit );
+	var pubSub  = new PubSub( Rabbit );
 
 	// Export interfaces
 	return {
-		'request'  : reqres.request,
-		'response' : reqres.response,
-		'send'     : sendreceive.send,
-		'receive'  : sendreceive.receive
+		'Requester'  : reqRes.Requester,
+		'Responder'  : reqRes.Responder,
+		'Sender'     : sendRec.Sender,
+		'Receiver'   : sendRec.Receiver,
+		'Publisher'  : pubSub.Publisher,
+		'Subscriber' : pubSub.Subscriber
 	};
 
 };
