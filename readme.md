@@ -2,8 +2,8 @@
 
 Currently this project is using [Rabbus](https://github.com/derickbailey/rabbus) and [Wascally](https://github.com/LeanKit-Labs/wascally). This project is aiming to support several producer / consumer patterns. The following are is a list of the planned patterns, and the checked ones are currently implemented:
 
-* [ ] Send / Receive
-* [ ] Publish / Subscribe
+* [X] Send / Receive
+* [X] Publish / Subscribe
 * [X] Request / Response
 
 The [JSend](http://labs.omniti.com/labs/jsend) specification is required to determine if an error has occurred in a response.
@@ -24,10 +24,75 @@ var rabbit = require( 'wascally' );
 var lapin  = require( 'lapin' )( rabbit );
 ```
 
-The following is simple usage example:
+The following are simple usage examples:
+
+**Send / Receive**
 
 ```javascript
-// Request
+// Sender
+var sender = new lapin.Sender( { 'messageType' : 'v1.logs.log' } );
+sender.produce( message, function ( error, response ) {
+
+	// handling the response is optional
+	if ( !error ) {
+		console.log( response );
+	}
+
+} );
+
+// Receiver
+var receiver = new lapin.Receiver( { 'messageType' : 'v1.logs.log' } );
+receiver.consume( function ( message, done ) {
+
+  someDatabaseQuery( message, function ( err, body ) {
+
+    if ( err ) {
+      throw err;
+    }
+
+    done();
+
+  } );
+
+} );
+```
+
+**Publish / Subscribe**
+
+```javascript
+// Publisher
+var publisher = new lapin.Publisher( { 'messageType' : 'v1.users.login' } );
+publisher.produce( message, function ( error, response ) {
+
+    // handling the response is optional
+	if ( !error ) {
+		console.log( response );
+	}
+
+} );
+
+
+// Subscriber
+var subscriber = new lapin.Receiver( { 'messageType' : 'v1.users.login' } );
+subscriber.consume( function ( message, done ) {
+
+  someDatabaseQuery( message, function ( err, body ) {
+
+    if ( err ) {
+      throw err;
+    }
+
+    done();
+
+  } );
+
+} );
+```
+
+**Request / Response**
+
+```javascript
+// Requester
 var requester = new lapin.Requester( { 'messageType' : 'v1.users.findAll' } );
 requester.produce( message, function ( error, data ) {
 
@@ -38,16 +103,16 @@ requester.produce( message, function ( error, data ) {
 	return reply( data.data );
 } );
 
-// Response
+// Responder
 var responder = new lapin.Responder( { 'messageType' : 'v1.users.findAll' } );
 responder.consume( function ( message, respond ) {
 
-	someDatabaseQuery().success( function ( users ) {
+	someDatabaseQuery().success( function ( result ) {
 
 		// JSend success with data
 		respond( {
 			'status' : 'success',
-			'data'   : users
+			'data'   : result
 		} );
 
 	} ).error( function handleError ( error ) {
