@@ -29,7 +29,7 @@ describe( 'sender / receiver', function () {
 
 		before( function ( done ) {
 			try {
-				sender = new Lapin.Sender( options );
+				sender = Lapin.sender( options );
 			} catch ( exception ) {
 				console.error( exception );
 			}
@@ -62,7 +62,7 @@ describe( 'sender / receiver', function () {
 
 			before( function ( done ) {
 				try {
-					sender   = new Lapin.Sender( options );
+					sender   = Lapin.sender( options );
 					sendStub = sinon.stub( sender, 'send', function () {} );
 				} catch ( exception ) {
 					console.error( exception );
@@ -91,7 +91,7 @@ describe( 'sender / receiver', function () {
 
 		before( function ( done ) {
 			try {
-				receiver = new Lapin.Receiver( options );
+				receiver = Lapin.receiver( options );
 			} catch ( exception ) {
 				console.error( exception );
 			}
@@ -130,7 +130,7 @@ describe( 'sender / receiver', function () {
 
 			before( function ( done ) {
 				try {
-					receiver    = new Lapin.Receiver( options );
+					receiver    = Lapin.receiver( options );
 					receiveStub = sinon.stub( receiver, 'receive', function () {} );
 				} catch ( exception ) {
 					console.error( exception );

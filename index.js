@@ -14,12 +14,12 @@ module.exports = function Lapin ( Rabbit ) {
 
 	// Export interfaces
 	return {
-		'Requester'  : reqRes.Requester,
-		'Responder'  : reqRes.Responder,
-		'Sender'     : sendRec.Sender,
-		'Receiver'   : sendRec.Receiver,
-		'Publisher'  : pubSub.Publisher,
-		'Subscriber' : pubSub.Subscriber
+		'requester'  : reqRes.requester,
+		'responder'  : reqRes.responder,
+		'sender'     : sendRec.sender,
+		'receiver'   : sendRec.receiver,
+		'publisher'  : pubSub.publisher,
+		'subscriber' : pubSub.subscriber
 	};
 
 };

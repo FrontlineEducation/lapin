@@ -30,7 +30,7 @@ The following are simple usage examples:
 
 ```javascript
 // Sender
-var sender = new lapin.Sender( { 'messageType' : 'v1.logs.log' } );
+var sender = lapin.sender( { 'messageType' : 'v1.logs.log' } );
 sender.produce( message, function ( error, response ) {
 
 	// handling the response is optional
@@ -41,7 +41,7 @@ sender.produce( message, function ( error, response ) {
 } );
 
 // Receiver
-var receiver = new lapin.Receiver( { 'messageType' : 'v1.logs.log' } );
+var receiver = lapin.receiver( { 'messageType' : 'v1.logs.log' } );
 receiver.consume( function ( message, done ) {
 
   someDatabaseQuery( message, function ( err, body ) {
@@ -61,7 +61,7 @@ receiver.consume( function ( message, done ) {
 
 ```javascript
 // Publisher
-var publisher = new lapin.Publisher( { 'messageType' : 'v1.users.login' } );
+var publisher = lapin.publisher( { 'messageType' : 'v1.users.login' } );
 publisher.produce( message, function ( error, response ) {
 
     // handling the response is optional
@@ -73,7 +73,7 @@ publisher.produce( message, function ( error, response ) {
 
 
 // Subscriber
-var subscriber = new lapin.Receiver( { 'messageType' : 'v1.users.login' } );
+var subscriber = lapin.receiver( { 'messageType' : 'v1.users.login' } );
 subscriber.consume( function ( message, done ) {
 
   someDatabaseQuery( message, function ( err, body ) {
@@ -93,7 +93,7 @@ subscriber.consume( function ( message, done ) {
 
 ```javascript
 // Requester
-var requester = new lapin.Requester( { 'messageType' : 'v1.users.findAll' } );
+var requester = lapin.requester( { 'messageType' : 'v1.users.findAll' } );
 requester.produce( message, function ( error, data ) {
 
 	if ( error ) {
@@ -104,7 +104,7 @@ requester.produce( message, function ( error, data ) {
 } );
 
 // Responder
-var responder = new lapin.Responder( { 'messageType' : 'v1.users.findAll' } );
+var responder = lapin.responder( { 'messageType' : 'v1.users.findAll' } );
 responder.consume( function ( message, respond ) {
 
 	someDatabaseQuery().success( function ( result ) {

@@ -29,7 +29,7 @@ describe( 'publisher / subscriber', function () {
 
 		before( function ( done ) {
 			try {
-				publisher = new Lapin.Publisher( options );
+				publisher = Lapin.publisher( options );
 			} catch ( exception ) {
 				console.error( exception );
 			}
@@ -62,7 +62,7 @@ describe( 'publisher / subscriber', function () {
 
 			before( function ( done ) {
 				try {
-					publisher   = new Lapin.Publisher( options );
+					publisher   = Lapin.publisher( options );
 					publishStub = sinon.stub( publisher, 'publish', function () {} );
 				} catch ( exception ) {
 					console.error( exception );
@@ -91,7 +91,7 @@ describe( 'publisher / subscriber', function () {
 
 		before( function ( done ) {
 			try {
-				subscriber = new Lapin.Subscriber( options );
+				subscriber = Lapin.subscriber( options );
 			} catch ( exception ) {
 				console.error( exception );
 			}
@@ -130,7 +130,7 @@ describe( 'publisher / subscriber', function () {
 
 			before( function ( done ) {
 				try {
-					subscriber    = new Lapin.Subscriber( options );
+					subscriber    = Lapin.subscriber( options );
 					subscribeStub = sinon.stub( subscriber, 'subscribe', function () {} );
 				} catch ( exception ) {
 					console.error( exception );

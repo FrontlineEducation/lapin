@@ -29,7 +29,7 @@ describe( 'requester / responder', function () {
 
 		before( function ( done ) {
 			try {
-				requester = new Lapin.Requester( options );
+				requester = Lapin.requester( options );
 			} catch ( exception ) {
 				console.error( exception );
 			}
@@ -62,7 +62,7 @@ describe( 'requester / responder', function () {
 
 			before( function ( done ) {
 				try {
-					requester   = new Lapin.Requester( options );
+					requester   = Lapin.requester( options );
 					requestStub = sinon.stub( requester, 'request', function () {} );
 				} catch ( exception ) {
 					console.error( exception );
@@ -91,7 +91,7 @@ describe( 'requester / responder', function () {
 
 		before( function ( done ) {
 			try {
-				responder = new Lapin.Responder( options );
+				responder = Lapin.responder( options );
 			} catch ( exception ) {
 				console.error( exception );
 			}
@@ -130,7 +130,7 @@ describe( 'requester / responder', function () {
 
 			before( function ( done ) {
 				try {
-					responder  = new Lapin.Responder( options );
+					responder  = Lapin.responder( options );
 					handleStub = sinon.stub( responder, 'handle', function () {} );
 				} catch ( exception ) {
 					console.error( exception );
