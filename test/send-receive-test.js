@@ -4,80 +4,77 @@ var sinon = require( 'sinon' );
 var Code  = require( 'code' );
 var Lab   = require( 'lab' );
 
-/*global describe:true it:true before:true after:true*/
-/*jshint -W079*/
-var lab      = exports.lab = Lab.script();
-var describe = lab.describe;
-var it       = lab.it;
-var before   = lab.before;
-var after    = lab.after;
-var expect   = Code.expect;
+var lab        = exports.lab = Lab.script();
+var describe   = lab.describe;
+var it         = lab.it;
+var before     = lab.before;
+var after      = lab.after;
+var expect     = Code.expect;
+var proxyquire = require( 'proxyquire' );
 
-var Rabbus = require( 'rabbus' );
-var Rabbit = require( 'wascally' );
-var Lapin  = require( '../' )( Rabbit );
-
-describe( 'sender / receiver', function () {
-
-	var message = { 'foo' : 'bar' };
-	var options = { 'messageType' : 'v1.test.create' };
-	var prefix  = 'send-rec.';
+describe( 'send and receive', function () {
 
 	describe( 'sender', function () {
 
-		var sender;
+		var RabbusStub = {
+			'Sender' : function () {}
+		};
 
-		before( function ( done ) {
-			try {
-				sender = Lapin.sender( options );
-			} catch ( exception ) {
-				console.error( exception );
+		var callbackSpy;
+		var Lapin;
+		var ReqRes;
+		var produceSpy;
+
+		var messageTest = { 'foo' : 'bar' };
+
+		var relpies = {
+			'success' : {
+				'status'  : 'success',
+				'message' : 'message sent'
 			}
-			done();
-		} );
+		};
 
-		it( 'should be an instance of `Rabbus.Sender`', function ( done ) {
-			expect( sender ).to.be.instanceof( Rabbus.Sender );
-			done();
-		} );
-
-		describe( 'sender constructor', function () {
-
-			it( 'should generate the correct `exchange`', function ( done ) {
-				var parts = options.messageType.split( '.' );
-				expect( sender.exchange ).to.equal( prefix + parts[ 1 ] + '-exchange' );
-				done();
-			} );
-
-			it( 'should generate the correct `messageType`', function ( done ) {
-				expect( sender.messageType ).to.equal( prefix + options.messageType );
-				done();
-			} );
-
-		} );
-
-		describe( 'sender `produce` method', function () {
-
-			var sendStub;
+		describe( 'send', function () {
 
 			before( function ( done ) {
-				try {
-					sender   = Lapin.sender( options );
-					sendStub = sinon.stub( sender, 'send', function () {} );
-				} catch ( exception ) {
-					console.error( exception );
-				}
+
+				RabbusStub.Sender.prototype.send = function ( message, reply ) {
+					// execute the callback
+					reply( relpies.success );
+				};
+
+				ReqRes = proxyquire( '../lib/send-receive.js', {
+					'rabbus' : RabbusStub
+				} );
+
+				callbackSpy = sinon.spy();
+				produceSpy  = sinon.spy( RabbusStub.Sender.prototype, 'send' );
+				Lapin       = new ReqRes( {} );
+
+				Lapin.send( 'v1.log.create', messageTest, callbackSpy );
+
 				done();
 			} );
 
 			after( function ( done ) {
-				sender.send.restore();
+				callbackSpy = undefined;
+				Lapin       = undefined;
+				ReqRes      = undefined;
+				produceSpy  = undefined;
+
 				done();
 			} );
 
-			it( 'should invoke `send` method', function ( done ) {
-				sender.produce( message, function () {} );
-				expect( sendStub.callCount ).to.equal( 1 );
+			it( 'should should call Rabbus.handle with callback', function ( done ) {
+				expect( produceSpy.calledWith( messageTest ) ).to.equal( true );
+
+				done();
+			} );
+
+			it( 'should call callback only once', function ( done ) {
+				expect( callbackSpy.calledOnce ).to.equal( true );
+				expect( callbackSpy.calledWith( null, relpies.success ) ).to.equal( true );
+
 				done();
 			} );
 
@@ -87,65 +84,55 @@ describe( 'sender / receiver', function () {
 
 	describe( 'receiver', function () {
 
-		var receiver;
+		var RabbusStub = {
+			'Receiver' : function () {}
+		};
 
-		before( function ( done ) {
-			try {
-				receiver = Lapin.receiver( options );
-			} catch ( exception ) {
-				console.error( exception );
-			}
-			done();
-		} );
+		var callbackSpy;
+		var Lapin;
+		var ReqRes;
+		var respondSpy;
 
-		it( 'should be an instance of `Rabbus.Receiver`', function ( done ) {
-			expect( receiver ).to.be.instanceof( Rabbus.Receiver );
-			done();
-		} );
-
-		describe( 'receiver constructor', function () {
-
-			it( 'should generate the correct `exchange`', function ( done ) {
-				var parts = options.messageType.split( '.' );
-				expect( receiver.exchange ).to.equal( prefix + parts[ 1 ] + '-exchange' );
-				done();
-			} );
-
-			it( 'should generate the correct `queue`', function ( done ) {
-				var parts = options.messageType.split( '.' );
-				expect( receiver.queue ).to.equal( prefix + parts[ 1 ] + '-queue' );
-				done();
-			} );
-
-			it( 'should generate the correct `messageType`', function ( done ) {
-				expect( receiver.messageType ).to.equal( prefix + options.messageType );
-				done();
-			} );
-
-		} );
-
-		describe( 'receiver `consume` method', function () {
-
-			var receiveStub;
+		describe( 'receive', function () {
 
 			before( function ( done ) {
-				try {
-					receiver    = Lapin.receiver( options );
-					receiveStub = sinon.stub( receiver, 'receive', function () {} );
-				} catch ( exception ) {
-					console.error( exception );
-				}
+
+				RabbusStub.Receiver.prototype.receive = function ( callback ) {
+					// execute the callback
+					callback();
+				};
+
+				ReqRes = proxyquire( '../lib/send-receive.js', {
+					'rabbus' : RabbusStub
+				} );
+
+				callbackSpy = sinon.spy();
+				respondSpy  = sinon.spy( RabbusStub.Receiver.prototype, 'receive' );
+				Lapin       = new ReqRes( {} );
+
+				Lapin.receive( 'v1.log.create', callbackSpy );
+
 				done();
 			} );
 
 			after( function ( done ) {
-				receiver.receive.restore();
+				callbackSpy = undefined;
+				Lapin       = undefined;
+				ReqRes      = undefined;
+				respondSpy  = undefined;
+
 				done();
 			} );
 
-			it( 'should invoke `receive` method', function ( done ) {
-				receiver.consume( function () {} );
-				expect( receiveStub.callCount ).to.equal( 1 );
+			it( 'should should call Rabbus.receive with callback', function ( done ) {
+				expect( respondSpy.calledWith( callbackSpy ) ).to.equal( true );
+
+				done();
+			} );
+
+			it( 'should call callback only once', function ( done ) {
+				expect( callbackSpy.calledOnce ).to.equal( true );
+
 				done();
 			} );
 

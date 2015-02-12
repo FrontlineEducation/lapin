@@ -4,80 +4,76 @@ var sinon = require( 'sinon' );
 var Code  = require( 'code' );
 var Lab   = require( 'lab' );
 
-/*global describe:true it:true before:true after:true*/
-/*jshint -W079*/
-var lab      = exports.lab = Lab.script();
-var describe = lab.describe;
-var it       = lab.it;
-var before   = lab.before;
-var after    = lab.after;
-var expect   = Code.expect;
+var lab        = exports.lab = Lab.script();
+var describe   = lab.describe;
+var it         = lab.it;
+var before     = lab.before;
+var after      = lab.after;
+var expect     = Code.expect;
+var proxyquire = require( 'proxyquire' );
 
-var Rabbus = require( 'rabbus' );
-var Rabbit = require( 'wascally' );
-var Lapin  = require( '../' )( Rabbit );
-
-describe( 'publisher / subscriber', function () {
-
-	var message = { 'foo' : 'bar' };
-	var options = { 'messageType' : 'v1.test.create' };
-	var prefix  = 'pub-sub.';
+describe( 'publish and subscribe', function () {
 
 	describe( 'publisher', function () {
 
-		var publisher;
+		var RabbusStub = {
+			'Publisher' : function () {}
+		};
 
-		before( function ( done ) {
-			try {
-				publisher = Lapin.publisher( options );
-			} catch ( exception ) {
-				console.error( exception );
+		var callbackSpy;
+		var Lapin;
+		var ReqRes;
+		var produceSpy;
+
+		var messageTest = { 'foo' : 'bar' };
+
+		var relpies = {
+			'success' : {
+				'status'  : 'success',
+				'message' : 'message sent'
 			}
-			done();
-		} );
+		};
 
-		it( 'should be an instance of `Rabbus.Publisher`', function ( done ) {
-			expect( publisher ).to.be.instanceof( Rabbus.Publisher );
-			done();
-		} );
-
-		describe( 'publisher constructor', function () {
-
-			it( 'should generate the correct `exchange`', function ( done ) {
-				var parts = options.messageType.split( '.' );
-				expect( publisher.exchange ).to.equal( prefix + parts[ 1 ] + '-exchange' );
-				done();
-			} );
-
-			it( 'should generate the correct `messageType`', function ( done ) {
-				expect( publisher.messageType ).to.equal( prefix + options.messageType );
-				done();
-			} );
-
-		} );
-
-		describe( 'publisher `produce` method', function () {
-
-			var publishStub;
+		describe( 'publish', function () {
 
 			before( function ( done ) {
-				try {
-					publisher   = Lapin.publisher( options );
-					publishStub = sinon.stub( publisher, 'publish', function () {} );
-				} catch ( exception ) {
-					console.error( exception );
-				}
+
+				RabbusStub.Publisher.prototype.publish = function ( message, reply ) {
+					// execute the callback
+					reply( relpies.success );
+				};
+
+				ReqRes = proxyquire( '../lib/pub-sub.js', {
+					'rabbus' : RabbusStub
+				} );
+
+				callbackSpy = sinon.spy();
+				produceSpy  = sinon.spy( RabbusStub.Publisher.prototype, 'publish' );
+				Lapin       = new ReqRes( {} );
+
+				Lapin.publish( 'v1.log.create', messageTest, callbackSpy );
+
 				done();
 			} );
 
 			after( function ( done ) {
-				publisher.publish.restore();
+				callbackSpy = undefined;
+				Lapin       = undefined;
+				ReqRes      = undefined;
+				produceSpy  = undefined;
+
 				done();
 			} );
 
-			it( 'should invoke `publish` method', function ( done ) {
-				publisher.produce( message, function () {} );
-				expect( publishStub.callCount ).to.equal( 1 );
+			it( 'should should call Rabbus.handle with callback', function ( done ) {
+				expect( produceSpy.calledWith( messageTest ) ).to.equal( true );
+
+				done();
+			} );
+
+			it( 'should call callback only once', function ( done ) {
+				expect( callbackSpy.calledOnce ).to.equal( true );
+
 				done();
 			} );
 
@@ -87,65 +83,55 @@ describe( 'publisher / subscriber', function () {
 
 	describe( 'subscriber', function () {
 
-		var subscriber;
+		var RabbusStub = {
+			'Subscriber' : function () {}
+		};
 
-		before( function ( done ) {
-			try {
-				subscriber = Lapin.subscriber( options );
-			} catch ( exception ) {
-				console.error( exception );
-			}
-			done();
-		} );
+		var callbackSpy;
+		var Lapin;
+		var ReqRes;
+		var respondSpy;
 
-		it( 'should be an instance of `Rabbus.Subscriber`', function ( done ) {
-			expect( subscriber ).to.be.instanceof( Rabbus.Subscriber );
-			done();
-		} );
-
-		describe( 'subscriber constructor', function () {
-
-			it( 'should generate the correct `exchange`', function ( done ) {
-				var parts = options.messageType.split( '.' );
-				expect( subscriber.exchange ).to.equal( prefix + parts[ 1 ] + '-exchange' );
-				done();
-			} );
-
-			it( 'should generate the correct `queue`', function ( done ) {
-				var parts = options.messageType.split( '.' );
-				expect( subscriber.queue ).to.equal( prefix + parts[ 1 ] + '-queue' );
-				done();
-			} );
-
-			it( 'should generate the correct `messageType`', function ( done ) {
-				expect( subscriber.messageType ).to.equal( prefix + options.messageType );
-				done();
-			} );
-
-		} );
-
-		describe( 'subscriber `consume` method', function () {
-
-			var subscribeStub;
+		describe( 'subscribe', function () {
 
 			before( function ( done ) {
-				try {
-					subscriber    = Lapin.subscriber( options );
-					subscribeStub = sinon.stub( subscriber, 'subscribe', function () {} );
-				} catch ( exception ) {
-					console.error( exception );
-				}
+
+				RabbusStub.Subscriber.prototype.subscribe = function ( callback ) {
+					// execute the callback
+					callback();
+				};
+
+				ReqRes = proxyquire( '../lib/pub-sub.js', {
+					'rabbus' : RabbusStub
+				} );
+
+				callbackSpy = sinon.spy();
+				respondSpy  = sinon.spy( RabbusStub.Subscriber.prototype, 'subscribe' );
+				Lapin       = new ReqRes( {} );
+
+				Lapin.subscribe( 'v1.log.create', callbackSpy );
+
 				done();
 			} );
 
 			after( function ( done ) {
-				subscriber.subscribe.restore();
+				callbackSpy = undefined;
+				Lapin       = undefined;
+				ReqRes      = undefined;
+				respondSpy  = undefined;
+
 				done();
 			} );
 
-			it( 'should invoke `subscribe` method', function ( done ) {
-				subscriber.consume( function () {} );
-				expect( subscribeStub.callCount ).to.equal( 1 );
+			it( 'should should call Rabbus.subscribe with callback', function ( done ) {
+				expect( respondSpy.calledWith( callbackSpy ) ).to.equal( true );
+
+				done();
+			} );
+
+			it( 'should call callback only once', function ( done ) {
+				expect( callbackSpy.calledOnce ).to.equal( true );
+
 				done();
 			} );
 

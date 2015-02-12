@@ -4,80 +4,177 @@ var sinon = require( 'sinon' );
 var Code  = require( 'code' );
 var Lab   = require( 'lab' );
 
-/*global describe:true it:true before:true after:true*/
-/*jshint -W079*/
-var lab      = exports.lab = Lab.script();
-var describe = lab.describe;
-var it       = lab.it;
-var before   = lab.before;
-var after    = lab.after;
-var expect   = Code.expect;
+var lab        = exports.lab = Lab.script();
+var describe   = lab.describe;
+var it         = lab.it;
+var before     = lab.before;
+var after      = lab.after;
+var expect     = Code.expect;
+var proxyquire = require( 'proxyquire' );
 
-var Rabbus = require( 'rabbus' );
-var Rabbit = require( 'wascally' );
-var Lapin  = require( '../' )( Rabbit );
-
-describe( 'requester / responder', function () {
-
-	var message = { 'foo' : 'bar' };
-	var options = { 'messageType' : 'v1.test.create' };
-	var prefix  = 'req-res.';
+describe( 'requester and responder', function () {
 
 	describe( 'requester', function () {
 
-		var requester;
+		var RabbusStub = {
+			'Requester' : function () {}
+		};
 
-		before( function ( done ) {
-			try {
-				requester = Lapin.requester( options );
-			} catch ( exception ) {
-				console.error( exception );
+		var callbackSpy;
+		var Lapin;
+		var ReqRes;
+		var requestSpy;
+
+		var messageTest = { 'foo' : 'bar' };
+
+		var relpies = {
+			'success' : {
+				'status' : 'success',
+				'data'   : { 'data' : 'success' }
+			},
+
+			'error' : {
+				'status'  : 'error',
+				'message' : 'Internal Error',
+				'data'    : { 'data' : 'error data' }
+			},
+
+			'fail' : {
+				'status' : 'fail',
+				'data'   : { 'data' : 'fail' }
 			}
-			done();
-		} );
+		};
 
-		it( 'should be an instance of `Rabbus.Requester`', function ( done ) {
-			expect( requester ).to.be.instanceof( Rabbus.Requester );
-			done();
-		} );
-
-		describe( 'requester constructor', function () {
-
-			it( 'should generate the correct `exchange`', function ( done ) {
-				var parts = options.messageType.split( '.' );
-				expect( requester.exchange ).to.equal( prefix + parts[ 1 ] + '-exchange' );
-				done();
-			} );
-
-			it( 'should generate the correct `messageType`', function ( done ) {
-				expect( requester.messageType ).to.equal( prefix + options.messageType );
-				done();
-			} );
-
-		} );
-
-		describe( 'requester `produce` method', function () {
-
-			var requestStub;
+		describe( 'success request', function () {
 
 			before( function ( done ) {
-				try {
-					requester   = Lapin.requester( options );
-					requestStub = sinon.stub( requester, 'request', function () {} );
-				} catch ( exception ) {
-					console.error( exception );
-				}
+				RabbusStub.Requester.prototype.request = function ( message, reply ) {
+					// return a successful reply
+					reply( relpies.success );
+				};
+
+				ReqRes = proxyquire( '../lib/req-res.js', {
+					'rabbus' : RabbusStub
+				} );
+
+				callbackSpy = sinon.spy();
+				requestSpy  = sinon.spy( RabbusStub.Requester.prototype, 'request' );
+				Lapin       = new ReqRes( {} );
+
+				Lapin.request( 'v1.test.create', messageTest, callbackSpy );
+
 				done();
 			} );
 
 			after( function ( done ) {
-				requester.request.restore();
+				callbackSpy = undefined;
+				Lapin       = undefined;
+				ReqRes      = undefined;
+				requestSpy  = undefined;
+
 				done();
 			} );
 
-			it( 'should invoke `request` method', function ( done ) {
-				requester.produce( message, function () {} );
-				expect( requestStub.callCount ).to.equal( 1 );
+			it( 'should should call Rabbus with correct message', function ( done ) {
+				expect( requestSpy.calledWith( messageTest ) ).to.equal( true );
+
+				done();
+			} );
+
+			it( 'should call callback without error', function ( done ) {
+				expect( callbackSpy.calledOnce ).to.equal( true );
+				expect( callbackSpy.calledWith( null, relpies.success ) ).to.equal( true );
+
+				done();
+			} );
+
+		} );
+
+		describe( 'error request', function () {
+
+			before( function ( done ) {
+				RabbusStub.Requester.prototype.request = function ( message, reply ) {
+					// return a reply with an error
+					reply( relpies.error );
+				};
+
+				ReqRes = proxyquire( '../lib/req-res.js', {
+					'rabbus' : RabbusStub
+				} );
+
+				callbackSpy = sinon.spy();
+				requestSpy  = sinon.spy( RabbusStub.Requester.prototype, 'request' );
+				Lapin       = new ReqRes( {} );
+
+				Lapin.request( 'v1.test.create', messageTest, callbackSpy );
+
+				done();
+			} );
+
+			after( function ( done ) {
+				callbackSpy = undefined;
+				Lapin       = undefined;
+				ReqRes      = undefined;
+				requestSpy  = undefined;
+
+				done();
+			} );
+
+			it( 'should should call Rabbus with correct message', function ( done ) {
+				expect( requestSpy.calledWith( messageTest ) ).to.equal( true );
+
+				done();
+			} );
+
+			it( 'should call callbackSpy with error', function ( done ) {
+				expect( callbackSpy.calledOnce ).to.equal( true );
+				expect( callbackSpy.calledWith( relpies.error, null ) ).to.equal( true );
+
+				done();
+			} );
+
+		} );
+
+		describe( 'fail request', function () {
+
+			before( function ( done ) {
+				RabbusStub.Requester.prototype.request = function ( message, reply ) {
+					// return a reply with an fail
+					reply( relpies.fail );
+				};
+
+				ReqRes = proxyquire( '../lib/req-res.js', {
+					'rabbus' : RabbusStub
+				} );
+
+				callbackSpy = sinon.spy();
+				requestSpy  = sinon.spy( RabbusStub.Requester.prototype, 'request' );
+				Lapin       = new ReqRes( {} );
+
+				Lapin.request( 'v1.test.create', messageTest, callbackSpy );
+
+				done();
+			} );
+
+			after( function ( done ) {
+				callbackSpy = undefined;
+				Lapin       = undefined;
+				ReqRes      = undefined;
+				requestSpy  = undefined;
+
+				done();
+			} );
+
+			it( 'should should call Rabbus with correct message', function ( done ) {
+				expect( requestSpy.calledWith( messageTest ) ).to.equal( true );
+
+				done();
+			} );
+
+			it( 'should call callback with a fail error', function ( done ) {
+				expect( callbackSpy.calledOnce ).to.equal( true );
+				expect( callbackSpy.calledWith( relpies.fail, null ) ).to.equal( true );
+
 				done();
 			} );
 
@@ -87,65 +184,55 @@ describe( 'requester / responder', function () {
 
 	describe( 'responder', function () {
 
-		var responder;
+		var RabbusStub = {
+			'Responder' : function () {}
+		};
 
-		before( function ( done ) {
-			try {
-				responder = Lapin.responder( options );
-			} catch ( exception ) {
-				console.error( exception );
-			}
-			done();
-		} );
+		var callbackSpy;
+		var Lapin;
+		var ReqRes;
+		var respondSpy;
 
-		it( 'should be an instance of `Rabbus.Responder`', function ( done ) {
-			expect( responder ).to.be.instanceof( Rabbus.Responder );
-			done();
-		} );
-
-		describe( 'responder constructor', function () {
-
-			it( 'should generate the correct `exchange`', function ( done ) {
-				var parts = options.messageType.split( '.' );
-				expect( responder.exchange ).to.equal( prefix + parts[ 1 ] + '-exchange' );
-				done();
-			} );
-
-			it( 'should generate the correct `queue`', function ( done ) {
-				var parts = options.messageType.split( '.' );
-				expect( responder.queue ).to.equal( prefix + parts[ 1 ] + '-queue' );
-				done();
-			} );
-
-			it( 'should generate the correct `messageType`', function ( done ) {
-				expect( responder.messageType ).to.equal( prefix + options.messageType );
-				done();
-			} );
-
-		} );
-
-		describe( 'responder `consume` method', function () {
-
-			var handleStub;
+		describe( 'response', function () {
 
 			before( function ( done ) {
-				try {
-					responder  = Lapin.responder( options );
-					handleStub = sinon.stub( responder, 'handle', function () {} );
-				} catch ( exception ) {
-					console.error( exception );
-				}
+
+				RabbusStub.Responder.prototype.handle = function ( callback ) {
+					// execute the callback
+					callback();
+				};
+
+				ReqRes = proxyquire( '../lib/req-res.js', {
+					'rabbus' : RabbusStub
+				} );
+
+				callbackSpy = sinon.spy();
+				respondSpy  = sinon.spy( RabbusStub.Responder.prototype, 'handle' );
+				Lapin       = new ReqRes( {} );
+
+				Lapin.respond( 'v1.test.create', callbackSpy );
+
 				done();
 			} );
 
 			after( function ( done ) {
-				responder.handle.restore();
+				callbackSpy = undefined;
+				Lapin       = undefined;
+				ReqRes      = undefined;
+				respondSpy  = undefined;
+
 				done();
 			} );
 
-			it( 'should invoke `handle` method', function ( done ) {
-				responder.consume( function () {} );
-				expect( handleStub.callCount ).to.equal( 1 );
+			it( 'should should call Rabbus.handle with callback', function ( done ) {
+				expect( respondSpy.calledWith( callbackSpy ) ).to.equal( true );
+
+				done();
+			} );
+
+			it( 'should call callback only once', function ( done ) {
+				expect( callbackSpy.calledOnce ).to.equal( true );
+
 				done();
 			} );
 

@@ -3,8 +3,6 @@
 var Code  = require( 'code' );
 var Lab   = require( 'lab' );
 
-/*global describe:true it:true*/
-/*jshint -W079*/
 var lab      = exports.lab = Lab.script();
 var describe = lab.describe;
 var it       = lab.it;
