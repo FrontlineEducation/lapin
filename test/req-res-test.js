@@ -27,21 +27,25 @@ describe( 'requester and responder', function () {
 
 		var messageTest = { 'foo' : 'bar' };
 
+		var successReply = { 'data' : 'success' };
+		var errorReply   = { 'message' : 'Internal Error' };
+		var failReply    = { 'data' : 'fail' };
+
 		var relpies = {
 			'success' : {
 				'status' : 'success',
-				'data'   : { 'data' : 'success' }
+				'data'   : successReply
 			},
 
 			'error' : {
 				'status'  : 'error',
-				'message' : 'Internal Error',
+				'message' : errorReply.message,
 				'data'    : { 'data' : 'error data' }
 			},
 
 			'fail' : {
 				'status' : 'fail',
-				'data'   : { 'data' : 'fail' }
+				'data'   : failReply
 			}
 		};
 
@@ -83,7 +87,7 @@ describe( 'requester and responder', function () {
 
 			it( 'should call callback without error', function ( done ) {
 				expect( callbackSpy.calledOnce ).to.equal( true );
-				expect( callbackSpy.calledWith( null, relpies.success ) ).to.equal( true );
+				expect( callbackSpy.calledWith( null, successReply ) ).to.equal( true );
 
 				done();
 			} );
@@ -128,7 +132,7 @@ describe( 'requester and responder', function () {
 
 			it( 'should call callbackSpy with error', function ( done ) {
 				expect( callbackSpy.calledOnce ).to.equal( true );
-				expect( callbackSpy.calledWith( relpies.error, null ) ).to.equal( true );
+				expect( callbackSpy.calledWith( errorReply.message, null ) ).to.equal( true );
 
 				done();
 			} );
@@ -173,7 +177,7 @@ describe( 'requester and responder', function () {
 
 			it( 'should call callback with a fail error', function ( done ) {
 				expect( callbackSpy.calledOnce ).to.equal( true );
-				expect( callbackSpy.calledWith( relpies.fail, null ) ).to.equal( true );
+				expect( callbackSpy.calledWith( failReply, null ) ).to.equal( true );
 
 				done();
 			} );
