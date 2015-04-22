@@ -9,15 +9,16 @@ env:
 
 before_install:
   - npm install -g npm
-  - npm install -g jshint
-  - npm install -g eslint
-  - npm install -g jscs
 
 install:
   - npm install
 
 script:
-  - jshint ./
-  - eslint --reset --eslintrc ./
-  - jscs ./
+
+  # Detect errors and potential problems
+  - npm run jshint -- ./
+  - npm run eslint -- --reset --eslintrc ./
+  - npm run jscs -- ./
+
+  # Run unit tests (and check for coverage)
   - npm test

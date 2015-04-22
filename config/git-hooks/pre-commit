@@ -1,3 +1,22 @@
-jshint ./ &&
-eslint --reset --eslintrc ./ &&
-jscs ./
+#!/bin/sh
+
+set -e
+
+bold=`tput bold`
+underline=`tput smul`
+attention=`tput setab 1`
+normal=`tput sgr0`
+
+runs=(
+	"jshint -- ./"
+	"eslint -- --reset --eslintrc ./"
+	"jscs -- ./"
+	"test"
+)
+
+for i in "${runs[@]}"
+do :
+	printf "${separator}${underline}${bold}npm run $i${normal}"
+
+	npm run $i
+done
