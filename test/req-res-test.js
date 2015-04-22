@@ -48,7 +48,9 @@ describe( 'requester and responder', function () {
 		describe( 'success request', function () {
 
 			before( function ( done ) {
-				RabbusStub.Requester.prototype.request = function ( message, reply ) {
+				RabbusStub.Requester.prototype.once           = function () {};
+				RabbusStub.Requester.prototype.removeListener = function () {};
+				RabbusStub.Requester.prototype.request        = function ( message, reply ) {
 					// return a successful reply
 					reply( replies.success );
 				};

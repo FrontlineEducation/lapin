@@ -38,7 +38,9 @@ describe( 'send and receive', function () {
 
 			before( function ( done ) {
 
-				RabbusStub.Sender.prototype.send = function ( message, reply ) {
+				RabbusStub.Sender.prototype.once           = function () {};
+				RabbusStub.Sender.prototype.removeListener = function () {};
+				RabbusStub.Sender.prototype.send           = function ( message, reply ) {
 					// execute the callback
 					reply( replies.success );
 				};

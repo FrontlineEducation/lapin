@@ -37,8 +37,9 @@ describe( 'publish and subscribe', function () {
 		describe( 'publish', function () {
 
 			before( function ( done ) {
-
-				RabbusStub.Publisher.prototype.publish = function ( message, reply ) {
+				RabbusStub.Publisher.prototype.once           = function () {};
+				RabbusStub.Publisher.prototype.removeListener = function () {};
+				RabbusStub.Publisher.prototype.publish        = function ( message, reply ) {
 					// execute the callback
 					reply( replies.success );
 				};
