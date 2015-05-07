@@ -27,7 +27,7 @@ describe( 'publish and subscribe', function () {
 
 		var messageTest = { 'foo' : 'bar' };
 
-		var relpies = {
+		var replies = {
 			'success' : {
 				'status'  : 'success',
 				'message' : 'message sent'
@@ -40,7 +40,7 @@ describe( 'publish and subscribe', function () {
 
 				RabbusStub.Publisher.prototype.publish = function ( message, reply ) {
 					// execute the callback
-					reply( relpies.success );
+					reply( replies.success );
 				};
 
 				ReqRes = proxyquire( '../lib/pub-sub.js', {

@@ -27,7 +27,7 @@ describe( 'requester and responder', function () {
 
 		var messageTest = { 'foo' : 'bar' };
 
-		var relpies = {
+		var replies = {
 			'success' : {
 				'status' : 'success',
 				'data'   : { 'data' : 'success' }
@@ -50,7 +50,7 @@ describe( 'requester and responder', function () {
 			before( function ( done ) {
 				RabbusStub.Requester.prototype.request = function ( message, reply ) {
 					// return a successful reply
-					reply( relpies.success );
+					reply( replies.success );
 				};
 
 				ReqRes = proxyquire( '../lib/req-res.js', {
@@ -83,7 +83,7 @@ describe( 'requester and responder', function () {
 
 			it( 'should call callback without error', function ( done ) {
 				expect( callbackSpy.calledOnce ).to.equal( true );
-				expect( callbackSpy.calledWith( null, relpies.success ) ).to.equal( true );
+				expect( callbackSpy.calledWith( null, replies.success ) ).to.equal( true );
 
 				done();
 			} );
@@ -95,7 +95,7 @@ describe( 'requester and responder', function () {
 			before( function ( done ) {
 				RabbusStub.Requester.prototype.request = function ( message, reply ) {
 					// return a reply with an error
-					reply( relpies.error );
+					reply( replies.error );
 				};
 
 				ReqRes = proxyquire( '../lib/req-res.js', {
@@ -128,7 +128,7 @@ describe( 'requester and responder', function () {
 
 			it( 'should call callbackSpy with error', function ( done ) {
 				expect( callbackSpy.calledOnce ).to.equal( true );
-				expect( callbackSpy.calledWith( relpies.error, null ) ).to.equal( true );
+				expect( callbackSpy.calledWith( replies.error, null ) ).to.equal( true );
 
 				done();
 			} );
@@ -140,7 +140,7 @@ describe( 'requester and responder', function () {
 			before( function ( done ) {
 				RabbusStub.Requester.prototype.request = function ( message, reply ) {
 					// return a reply with an fail
-					reply( relpies.fail );
+					reply( replies.fail );
 				};
 
 				ReqRes = proxyquire( '../lib/req-res.js', {
@@ -173,7 +173,7 @@ describe( 'requester and responder', function () {
 
 			it( 'should call callback with a fail error', function ( done ) {
 				expect( callbackSpy.calledOnce ).to.equal( true );
-				expect( callbackSpy.calledWith( relpies.fail, null ) ).to.equal( true );
+				expect( callbackSpy.calledWith( replies.fail, null ) ).to.equal( true );
 
 				done();
 			} );

@@ -27,7 +27,7 @@ describe( 'send and receive', function () {
 
 		var messageTest = { 'foo' : 'bar' };
 
-		var relpies = {
+		var replies = {
 			'success' : {
 				'status'  : 'success',
 				'message' : 'message sent'
@@ -40,7 +40,7 @@ describe( 'send and receive', function () {
 
 				RabbusStub.Sender.prototype.send = function ( message, reply ) {
 					// execute the callback
-					reply( relpies.success );
+					reply( replies.success );
 				};
 
 				ReqRes = proxyquire( '../lib/send-receive.js', {
@@ -73,8 +73,6 @@ describe( 'send and receive', function () {
 
 			it( 'should call callback only once', function ( done ) {
 				expect( callbackSpy.calledOnce ).to.equal( true );
-				expect( callbackSpy.calledWith( null, relpies.success ) ).to.equal( true );
-
 				done();
 			} );
 
@@ -111,7 +109,6 @@ describe( 'send and receive', function () {
 				Lapin       = new ReqRes( {} );
 
 				Lapin.receive( 'v1.log.create', callbackSpy );
-
 				done();
 			} );
 
