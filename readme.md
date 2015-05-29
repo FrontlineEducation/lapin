@@ -30,8 +30,7 @@ The following are simple usage examples:
 
 ```javascript
 // Sender
-var sender = lapin.sender( { 'messageType' : 'v1.logs.log' } );
-sender.produce( message, function ( error, response ) {
+lapin.send( 'v1.logs.log', message, function ( error, response ) {
 
 	// handling the response is optional
 	if ( !error ) {
@@ -41,8 +40,7 @@ sender.produce( message, function ( error, response ) {
 } );
 
 // Receiver
-var receiver = lapin.receiver( { 'messageType' : 'v1.logs.log' } );
-receiver.consume( function ( message, done ) {
+lapin.receive( 'v1.logs.log', function ( message, done ) {
 
   someDatabaseQuery( message, function ( err, body ) {
 
@@ -61,8 +59,7 @@ receiver.consume( function ( message, done ) {
 
 ```javascript
 // Publisher
-var publisher = lapin.publisher( { 'messageType' : 'v1.users.login' } );
-publisher.produce( message, function ( error, response ) {
+lapin.publish( 'v1.users.login', message, function ( error, response ) {
 
     // handling the response is optional
 	if ( !error ) {
@@ -73,8 +70,7 @@ publisher.produce( message, function ( error, response ) {
 
 
 // Subscriber
-var subscriber = lapin.receiver( { 'messageType' : 'v1.users.login' } );
-subscriber.consume( function ( message, done ) {
+lapin.subscribe( 'v1.users.login', function ( message, done ) {
 
   someDatabaseQuery( message, function ( err, body ) {
 
@@ -93,8 +89,7 @@ subscriber.consume( function ( message, done ) {
 
 ```javascript
 // Requester
-var requester = lapin.requester( { 'messageType' : 'v1.users.findAll' } );
-requester.produce( message, function ( error, data ) {
+lapin.request( 'v1.users.findAll', message, function ( error, data ) {
 
 	if ( error ) {
 		return reply( error ).code( 500 );
@@ -104,8 +99,7 @@ requester.produce( message, function ( error, data ) {
 } );
 
 // Responder
-var responder = lapin.responder( { 'messageType' : 'v1.users.findAll' } );
-responder.consume( function ( message, respond ) {
+lapin.respond( 'v1.users.findAll', function ( message, respond ) {
 
 	someDatabaseQuery().success( function ( result ) {
 
@@ -127,6 +121,35 @@ responder.consume( function ( message, respond ) {
 
 } );
 ```
+
+## Attaching Logs
+#### Logging through a service
+When attaching a logger through a service
+```javascript
+
+var rabbit       = require( 'wascally' );
+var lapinOptions = {
+	'rabbit'     : rabbit,
+	'logService' : {
+		'prefix' : 'v1.logs.logService'
+	}
+};
+
+var lapin  = require( 'lapin' )( lapinOptions );
+```
+Another service listening to `v1.logs.logService` should be receiving the log details sent. Logger thorough a service is using send/receive pattern.
+
+#### Attaching a logger object
+
+ *** under development **
+
+#### No logging
+When no logging involved - require lapin this way:
+```javascript
+var rabbit = require( 'wascally' );
+var lapin  = require( 'lapin' )( rabbit );
+```
+
 
 ## Contributing
 All pull requests must follow [coding conventions and standards](https://github.com/School-Improvement-Network/coding-conventions).

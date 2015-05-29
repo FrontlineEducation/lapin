@@ -1,16 +1,19 @@
 'use strict';
 
+// Lapin object placeholder
+var lapin;
+
 // Load patterns
 var ReqRes  = require( './lib/req-res' );
 var SendRec = require( './lib/send-receive' );
 var PubSub  = require( './lib/pub-sub' );
 
-module.exports = function Lapin ( Rabbit ) {
+function Lapin ( options ) {
 
 	// Initialize patterns
-	var reqRes  = new ReqRes( Rabbit );
-	var sendRec = new SendRec( Rabbit );
-	var pubSub  = new PubSub( Rabbit );
+	var reqRes  = new ReqRes( options );
+	var sendRec = new SendRec( options );
+	var pubSub  = new PubSub( options );
 
 	// Export interfaces
 	return {
@@ -22,4 +25,12 @@ module.exports = function Lapin ( Rabbit ) {
 		'subscribe' : pubSub.subscribe
 	};
 
+}
+
+module.exports = function ( options ) {
+	if ( !lapin ) {
+		lapin = new Lapin( options );
+	}
+	return lapin;
 };
+
