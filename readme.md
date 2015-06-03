@@ -28,6 +28,7 @@ The following are simple usage examples:
 
 **Send / Receive**
 
+***Send***
 ```javascript
 // Sender
 lapin.send( 'v1.logs.log', message, function ( error, response ) {
@@ -38,7 +39,22 @@ lapin.send( 'v1.logs.log', message, function ( error, response ) {
 	}
 
 } );
+```
+Or use the promise style send
+```javascript
+lapin.sendPromise( 'v1.logs.log', message )
+  .then( function ( response ) {
+    // Return for chain then and handle response
+    console.log( response );
+    
+  } )
+  .catch( function ( error ) {
+    // Handler error
+  } );
+```
 
+***Receive***
+```javascript
 // Receiver
 lapin.receive( 'v1.logs.log', function ( message, done ) {
 
@@ -87,6 +103,7 @@ lapin.subscribe( 'v1.users.login', function ( message, done ) {
 
 **Request / Response**
 
+***Request***
 ```javascript
 // Requester
 lapin.request( 'v1.users.findAll', message, function ( error, data ) {
@@ -97,7 +114,21 @@ lapin.request( 'v1.users.findAll', message, function ( error, data ) {
 
 	return reply( data.data );
 } );
-
+```
+Or use the promise style request
+```javascript
+lapin.requestPromise( 'v1.users.findAll', message )
+  .then( function ( data ) {
+    // Handle data
+    return reply( data.data );
+    
+  } )
+  .catch( function ( error ) {
+    // Handle error
+  } );
+```
+***Response***
+```javascript
 // Responder
 lapin.respond( 'v1.users.findAll', function ( message, respond ) {
 

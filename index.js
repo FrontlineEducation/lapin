@@ -1,5 +1,8 @@
 'use strict';
 
+// Require bluebird
+var bluebird = require( 'bluebird' );
+
 // Lapin object placeholder
 var lapin;
 
@@ -17,12 +20,18 @@ function Lapin ( options ) {
 
 	// Export interfaces
 	return {
+
 		'request'   : reqRes.request,
 		'respond'   : reqRes.respond,
 		'send'      : sendRec.send,
 		'receive'   : sendRec.receive,
 		'publish'   : pubSub.publish,
-		'subscribe' : pubSub.subscribe
+		'subscribe' : pubSub.subscribe,
+
+		// Promises
+		'requestPromise' : bluebird.promisify( reqRes.request ),
+		'sendPromise'    : bluebird.promisify( sendRec.send )
+
 	};
 
 }
