@@ -43,14 +43,14 @@ lapin.send( 'v1.logs.log', message, function ( error, response ) {
 Or use the promise style send
 ```javascript
 lapin.sendPromise( 'v1.logs.log', message )
-  .then( function ( response ) {
-    // Return for chain then and handle response
-    console.log( response );
-    
-  } )
-  .catch( function ( error ) {
-    // Handler error
-  } );
+	.then( function ( response ) {
+		// Return for chain then and handle response
+		console.log( response );
+
+	} )
+	.catch( function ( error ) {
+		// Handler error
+	} );
 ```
 
 ***Receive***
@@ -58,15 +58,15 @@ lapin.sendPromise( 'v1.logs.log', message )
 // Receiver
 lapin.receive( 'v1.logs.log', function ( message, done ) {
 
-  someDatabaseQuery( message, function ( err, body ) {
+	someDatabaseQuery( message, function ( err, body ) {
 
-    if ( err ) {
-      throw err;
-    }
+		if ( err ) {
+			throw err;
+		}
 
-    done();
+		done();
 
-  } );
+	} );
 
 } );
 ```
@@ -77,7 +77,7 @@ lapin.receive( 'v1.logs.log', function ( message, done ) {
 // Publisher
 lapin.publish( 'v1.users.login', message, function ( error, response ) {
 
-    // handling the response is optional
+		// handling the response is optional
 	if ( !error ) {
 		console.log( response );
 	}
@@ -88,15 +88,15 @@ lapin.publish( 'v1.users.login', message, function ( error, response ) {
 // Subscriber
 lapin.subscribe( 'v1.users.login', function ( message, done ) {
 
-  someDatabaseQuery( message, function ( err, body ) {
+	someDatabaseQuery( message, function ( err, body ) {
 
-    if ( err ) {
-      throw err;
-    }
+		if ( err ) {
+			throw err;
+		}
 
-    done();
+		done();
 
-  } );
+	} );
 
 } );
 ```
@@ -118,40 +118,43 @@ lapin.request( 'v1.users.findAll', message, function ( error, data ) {
 Or use the promise style request
 ```javascript
 lapin.requestPromise( 'v1.users.findAll', message )
-  .then( function ( data ) {
-    // Handle data
-    return reply( data.data );
-    
-  } )
-  .catch( function ( error ) {
-    // Handle error
-  } );
+	.then( function ( data ) {
+		// Handle data
+		return reply( data.data );
+
+	} )
+	.catch( function ( error ) {
+		// Handle error
+	} );
 ```
 ***Response***
 ```javascript
 // Responder
 lapin.respond( 'v1.users.findAll', function ( message, respond ) {
 
-	someDatabaseQuery().success( function ( result ) {
+	if ( message.invalid ) {
+			return respond.fail( 'Invalid data' );
+	}
+
+	someDatabaseQuery().then( function ( result ) {
 
 		// JSend success with data
-		respond( {
-			'status' : 'success',
-			'data'   : result
-		} );
+		respond.success( result );
 
-	} ).error( function handleError ( error ) {
+	} ).catch( function handleError ( error ) {
 
 		// JSend error
-		respond( {
-			'status' : 'error',
-			'data'   : error
-		} );
+		respond.error( 'Failed query', error, 500 );
+		// or -- code is optional
+		respond.error( 'Failed query', error );
+		// or -- data is optional
+		respond.error( 'Failed query' );
 
 	} );
 
 } );
 ```
+Please refer to [JSEND](http://labs.omniti.com/labs/jsend) for standard reply attributes
 
 ## Attaching Logs
 #### Logging through a service

@@ -193,11 +193,12 @@ describe( 'requester and responder', function () {
 		var callbackSpy;
 		var Lapin;
 		var ReqRes;
-		var respondSpy;
 
 		describe( 'response', function () {
 
 			before( function ( done ) {
+
+				callbackSpy = sinon.spy();
 
 				RabbusStub.Responder.prototype.handle = function ( callback ) {
 					// execute the callback
@@ -208,8 +209,6 @@ describe( 'requester and responder', function () {
 					'rabbus' : RabbusStub
 				} );
 
-				callbackSpy = sinon.spy();
-				respondSpy  = sinon.spy( RabbusStub.Responder.prototype, 'handle' );
 				Lapin       = new ReqRes( {} );
 
 				Lapin.respond( 'v1.test.create', callbackSpy );
@@ -221,13 +220,6 @@ describe( 'requester and responder', function () {
 				callbackSpy = undefined;
 				Lapin       = undefined;
 				ReqRes      = undefined;
-				respondSpy  = undefined;
-
-				done();
-			} );
-
-			it( 'should should call Rabbus.handle with callback', function ( done ) {
-				expect( respondSpy.calledWith( callbackSpy ) ).to.equal( true );
 
 				done();
 			} );

@@ -21,7 +21,7 @@
   "homepage": "https://github.com/School-Improvement-Network/lapin",
   "dependencies": {
     "bluebird": "^2.9.27",
-    "rabbus": "^0.2.1"
+    "rabbus": "^0.4.3"
   },
   "devDependencies": {
     "code": "^1.2.1",
