@@ -30,7 +30,7 @@
     "jshint": "^2.6.3",
     "lab": "^5.2.0",
     "proxyquire": "^1.3.1",
-    "sinet-coding-conventions": "^1.14.0",
+    "sinet-coding-conventions": "^1.30.0",
     "sinon": "^1.12.2",
     "wascally": "~0.2.0-7"
   }
