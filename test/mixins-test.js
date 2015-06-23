@@ -19,6 +19,7 @@ describe( 'mixins', function () {
 
 	describe( 'mixins `extract` method', function () {
 
+		/* eslint-disable no-empty */
 		it( 'should throw error on invalid messageType', function ( done ) {
 			try {
 				Code.expect( mixins.extract( 'test.create' ) )
