@@ -36,12 +36,13 @@ describe( 'requester and responder', function () {
 			'error' : {
 				'status'  : 'error',
 				'message' : 'Internal Error',
-				'data'    : { 'data' : 'error data' }
+				'data'    : { 'data' : 'error data' },
+				'code'    : 500
 			},
 
 			'fail' : {
 				'status' : 'fail',
-				'data'   : { 'data' : 'fail' }
+				'data'   : 'Invalid data'
 			}
 		};
 
@@ -175,7 +176,15 @@ describe( 'requester and responder', function () {
 
 			it( 'should call callback with a fail error', function ( done ) {
 				expect( callbackSpy.calledOnce ).to.equal( true );
-				expect( callbackSpy.calledWith( replies.fail, null ) ).to.equal( true );
+
+				var requestFail = {
+					'status'  : 'fail',
+					'data'    : 'Invalid data',
+					'message' : '',
+					'code'    : 0
+				};
+
+				expect( callbackSpy.calledWith( requestFail, null ) ).to.equal( true );
 
 				done();
 			} );
