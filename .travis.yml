@@ -1,3 +1,5 @@
+sudo: false
+
 language: node_js
 
 node_js:
@@ -6,6 +8,13 @@ node_js:
 env:
   global:
     - NODE_ENV=travis
+
+services:
+  - rabbitmq
+
+addons:
+  hosts:
+    - rabbitmq
 
 before_install:
   - npm install -g npm

@@ -16,6 +16,7 @@ node_modules/
 *.dmg
 *.gz
 *.iso
+instrumented
 *.jar
 *.rar
 *.tar

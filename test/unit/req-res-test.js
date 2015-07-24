@@ -1,15 +1,10 @@
 'use strict';
 
-var sinon = require( 'sinon' );
-var Code  = require( 'code' );
-var Lab   = require( 'lab' );
+/* jshint expr: true */
+/* eslint no-unused-expressions:0 */
 
-var lab        = exports.lab = Lab.script();
-var describe   = lab.describe;
-var it         = lab.it;
-var before     = lab.before;
-var after      = lab.after;
-var expect     = Code.expect;
+var expect     = require( 'chai' ).expect;
+var sinon      = require( 'sinon' );
 var proxyquire = require( 'proxyquire' );
 
 describe( 'requester and responder', function () {
@@ -55,7 +50,7 @@ describe( 'requester and responder', function () {
 					reply( replies.success );
 				};
 
-				ReqRes = proxyquire( '../lib/req-res.js', {
+				ReqRes = proxyquire( process.cwd() + '/lib/req-res.js', {
 					'rabbus' : RabbusStub
 				} );
 
@@ -100,7 +95,7 @@ describe( 'requester and responder', function () {
 					reply( replies.error );
 				};
 
-				ReqRes = proxyquire( '../lib/req-res.js', {
+				ReqRes = proxyquire( process.cwd() + '/lib/req-res.js', {
 					'rabbus' : RabbusStub
 				} );
 
@@ -145,7 +140,7 @@ describe( 'requester and responder', function () {
 					reply( replies.fail );
 				};
 
-				ReqRes = proxyquire( '../lib/req-res.js', {
+				ReqRes = proxyquire( process.cwd() + '/lib/req-res.js', {
 					'rabbus' : RabbusStub
 				} );
 
@@ -205,7 +200,7 @@ describe( 'requester and responder', function () {
 					callback();
 				};
 
-				ReqRes = proxyquire( '../lib/req-res.js', {
+				ReqRes = proxyquire( process.cwd() + '/lib/req-res.js', {
 					'rabbus' : RabbusStub
 				} );
 

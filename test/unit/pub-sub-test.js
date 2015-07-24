@@ -1,15 +1,10 @@
 'use strict';
 
-var sinon = require( 'sinon' );
-var Code  = require( 'code' );
-var Lab   = require( 'lab' );
+/* jshint expr: true */
+/* eslint no-unused-expressions:0 */
 
-var lab        = exports.lab = Lab.script();
-var describe   = lab.describe;
-var it         = lab.it;
-var before     = lab.before;
-var after      = lab.after;
-var expect     = Code.expect;
+var expect     = require( 'chai' ).expect;
+var sinon      = require( 'sinon' );
 var proxyquire = require( 'proxyquire' );
 
 describe( 'publish and subscribe', function () {
@@ -37,6 +32,7 @@ describe( 'publish and subscribe', function () {
 		describe( 'publish', function () {
 
 			before( function ( done ) {
+
 				RabbusStub.Publisher.prototype.once           = function () {};
 				RabbusStub.Publisher.prototype.removeListener = function () {};
 				RabbusStub.Publisher.prototype.publish        = function ( message, reply ) {
@@ -44,7 +40,7 @@ describe( 'publish and subscribe', function () {
 					reply( replies.success );
 				};
 
-				ReqRes = proxyquire( '../lib/pub-sub.js', {
+				ReqRes = proxyquire( process.cwd() + '/lib/pub-sub.js', {
 					'rabbus' : RabbusStub
 				} );
 
@@ -102,7 +98,7 @@ describe( 'publish and subscribe', function () {
 					callback();
 				};
 
-				ReqRes = proxyquire( '../lib/pub-sub.js', {
+				ReqRes = proxyquire( process.cwd() + '/lib/pub-sub.js', {
 					'rabbus' : RabbusStub
 				} );
 
