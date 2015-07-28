@@ -3,39 +3,42 @@
 /* eslint no-process-exit:0 */
 
 // load third party modules
-var del             = require( 'del' );
-var gulp            = require( 'gulp' );
-var mocha           = require( 'gulp-mocha' );
-var istanbul        = require( 'gulp-istanbul' );
-var covEnforcerOpts = {
-	'thresholds' : require( 'sinet-istanbul-coverage-enforcement' )
-};
-
-var paths = {
-	'cover' : [
-
-		// Include everything to be covered
-		'**/*.js',
-
-		// Exclude files
-		'!gulpfile.js',
-
-		// Exclude directories that are not code
-		'!config/**',
-		'!instrumented/**',
-		'!node_modules/**',
-		'!test/**'
-	],
-
-	'test'     : [ 'test/**/*.js' ],
-	'coverage' : 'instrumented'
-};
+var del      = require( 'del' );
+var gulp     = require( 'gulp' );
+var mocha    = require( 'gulp-mocha' );
+var istanbul = require( 'gulp-istanbul' );
+var colors   = require( 'colors/safe' );
 
 gulp.task( 'clean-coverage', function () {
 	del( [ 'instrumented' ] );
 } );
 
 gulp.task( 'test', [ 'clean-coverage' ], function () {
+
+	var covEnforcerOpts = {
+		'thresholds' : require( 'sinet-istanbul-coverage-enforcement' )
+	};
+
+	var paths = {
+		'cover' : [
+
+			// Include everything to be covered
+			'**/*.js',
+
+			// Exclude files
+			'!gulpfile.js',
+
+			// Exclude directories that are not code
+			'!config/**',
+			'!instrumented/**',
+			'!node_modules/**',
+			'!test/api/**',
+			'!test/**'
+		],
+
+		'test'     : [ 'test/it/**/*.js', 'test/unit/**/*.js' ],
+		'coverage' : 'instrumented'
+	};
 
 	var coverageDir  = paths.coverage;
 	var mochaOptions = {
@@ -81,3 +84,30 @@ gulp.task( 'test', [ 'clean-coverage' ], function () {
 				} );
 		} );
 } );
+
+gulp.task( 'inspect-queues', function () {
+
+	// delay to give time reading queues
+	setTimeout( function () {
+
+		var spawn = require( 'child_process' ).spawn;
+		var queue = spawn( 'node', [ 'test/api' ] );
+
+		queue.stdout.on( 'data', function ( data ) {
+			console.log( data.toString() );
+		} );
+
+		queue.stderr.on( 'data', function ( data ) {
+
+			if ( parseInt( data.toString(), 10 ) ) {
+				console.log( colors.red( 'error - having unacked/ready msgs' ) );
+			} else {
+				console.log( colors.green( 'Success - no unacked/ready msgs' ) );
+			}
+			process.exit( data );
+		} );
+
+	}, 2000 );
+
+} );
+
