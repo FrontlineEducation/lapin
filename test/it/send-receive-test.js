@@ -54,13 +54,13 @@ describe( 'Perform Send Receive', function () {
 	describe( 'WITHOUT payload', function () {
 
 		var received;
-		var errorData;
+		var failData;
 
 		before( function ( done ) {
 			var payload;
 			lapin.send( 'v1.sendrectest.get', payload, function ( error, data ) {
 				received  = data;
-				errorData = error;
+				failData = error;
 				done();
 			} );
 		} );
@@ -71,11 +71,11 @@ describe( 'Perform Send Receive', function () {
 
 		} );
 
-		it( '-- should received an errorData in request', function () {
+		it( '-- should received an failData in request', function () {
 
-			expect( errorData ).be.an( 'object' );
-			expect( errorData.status ).to.exist.and.to.equal( 'error' );
-			expect( errorData.message ).to.exist.and.to.equal( 'Invalid data' );
+			expect( failData ).be.an( 'object' );
+			expect( failData.status ).to.exist.and.to.equal( 'fail' );
+			expect( failData.message ).to.exist.and.to.equal( 'Invalid data' );
 
 		} );
 

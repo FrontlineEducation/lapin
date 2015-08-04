@@ -7,6 +7,7 @@ var expect = require( 'chai' ).expect;
 var rabbit = require( 'wascally' );
 var Lapin  = require( process.cwd() );
 var lapin  = new Lapin( rabbit );
+var Joi    = require( 'joi' );
 
 describe( 'Perform request respond', function () {
 
@@ -56,6 +57,134 @@ describe( 'Perform request respond', function () {
 
 		it( '-- should have a null error response', function () {
 			expect( errorResponse ).to.be.an( 'null' );
+
+		} );
+
+	} );
+
+	describe( '- Success with JOI Validation -', function () {
+
+		var response;
+		var errorResponse;
+		var request;
+
+		var validationData = {
+			'username'  : 'Testfoo',
+			'password'  : 'foo',
+			'birthyear' : '1990'
+		};
+
+		before( function ( done ) {
+
+			lapin.respond( {
+				'messageType' : 'v1.reqrestestJoi.get',
+				'validate'    : Joi.object().keys( {
+					'username'     : Joi.string().alphanum().min( 3 ).max( 30 ).required(),
+					'password'     : Joi.string().regex( /[a-zA-Z0-9]{3,30}/ ),
+					'access_token' : [ Joi.string(), Joi.number() ],
+					'birthyear'    : Joi.number().integer().min( 1900 ).max( 2013 ),
+					'email'        : Joi.string().email()
+				} ).with( 'username', 'birthyear' ).without( 'password', 'access_token' )
+
+			}, function ( requestData, send ) {
+				request = requestData;
+				send.success( 'users' );
+			} )
+
+				.on( 'error', done )
+				.on( 'ready', function () {
+
+					lapin.request( 'v1.reqrestestJoi.get', validationData, function ( error, data ) {
+						response      = data;
+						errorResponse = error;
+						setTimeout( done, 1000 );
+					} );
+
+				} );
+		} );
+
+		it( '-- should receive correct requestData', function () {
+
+			expect( request ).be.an( 'object' );
+			expect( request.username ).to.exist.and.to.equal( validationData.username );
+			expect( request.password ).to.exist.and.to.equal( validationData.password );
+			expect( request.birthyear ).to.exist.and.to.equal( validationData.birthyear );
+
+		} );
+
+		it( '-- should return SUCCESS data', function () {
+
+			expect( response ).be.an( 'object' );
+			expect( response.status ).to.exist.and.to.equal( 'success' );
+			expect( response.data ).to.exist.and.to.equal( 'users' );
+
+		} );
+
+		it( '-- should have a null error response', function () {
+			expect( errorResponse ).to.be.an( 'null' );
+
+		} );
+
+	} );
+
+	describe( '- Error with JOI Validation -', function () {
+
+		var response;
+		var failResponse;
+		var request;
+
+		var validationData = {
+			'username' : 'Testfoo',
+			'password' : 'foo'
+		};
+
+		before( function ( done ) {
+
+			lapin.respond( {
+				'messageType' : 'v1.reqrestestJoiFail.get',
+				'validate'    : Joi.object().keys( {
+					'username'     : Joi.string().alphanum().min( 3 ).max( 30 ).required(),
+					'password'     : Joi.string().regex( /[a-zA-Z0-9]{3,30}/ ),
+					'access_token' : [ Joi.string(), Joi.number() ],
+					'birthyear'    : Joi.number().integer().min( 1900 ).max( 2013 ),
+					'email'        : Joi.string().email()
+				} ).with( 'username', 'birthyear' ).without( 'password', 'access_token' )
+
+			}, function ( requestData, send ) {
+				// will not call callback
+				request = requestData;
+				send.success( 'users' );
+			} )
+
+				.on( 'error', done )
+				.on( 'ready', function () {
+
+					lapin.request( 'v1.reqrestestJoiFail.get', validationData, function ( error, data ) {
+						response     = data;
+						failResponse = error;
+						setTimeout(  done, 1000 );
+					} );
+
+				} );
+		} );
+
+		it( '-- should receive requestData and bypass callback', function () {
+
+			expect( request ).be.not.exist;
+
+		} );
+
+		it( '-- should return FAIL data', function () {
+
+			expect( failResponse ).be.an( 'object' );
+			expect( failResponse.status ).to.exist.and.to.equal( 'fail' );
+			expect( failResponse.data ).to.exist;
+
+		} );
+
+		it( '-- should have a null response', function () {
+
+			expect( response ).to.be.an( 'null' );
 
 		} );
 
@@ -154,16 +283,16 @@ describe( 'Perform request respond', function () {
 	} );
 
 	// error for now in the future this should be FAIL
-	describe( '- Error WITHOUT payload -', function () {
+	describe( '- Fail WITHOUT payload -', function () {
 
-		var errorData;
+		var failData;
 		var response;
 
 		before( function ( done ) {
 			var payload;
 			lapin.request( 'v1.reqrestest.put', payload, function ( error, data ) {
-				response  = data;
-				errorData = error;
+				response = data;
+				failData = error;
 				done();
 			} );
 		} );
@@ -174,11 +303,11 @@ describe( 'Perform request respond', function () {
 
 		} );
 
-		it( '-- should received an errorData in request', function () {
+		it( '-- should received an failData in request', function () {
 
-			expect( errorData ).be.an( 'object' );
-			expect( errorData.status ).to.exist.and.to.equal( 'error' );
-			expect( errorData.message ).to.exist.and.to.equal( 'Invalid data' );
+			expect( failData ).be.an( 'object' );
+			expect( failData.status ).to.exist.and.to.equal( 'fail' );
+			expect( failData.message ).to.exist.and.to.equal( 'Invalid data' );
 
 		} );
 

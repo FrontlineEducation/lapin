@@ -156,34 +156,34 @@ lapin.respond( 'v1.users.findAll', function ( message, respond ) {
 ```
 Please refer to [JSEND](http://labs.omniti.com/labs/jsend) for standard reply attributes
 
-## Attaching Logs
-#### Logging through a service
-When attaching a logger through a service
+***Response with Validation using Joi***
 ```javascript
+// Responder
+lapin.respond( {
+    'messageType' : 'v1.users.findAll',
+    'validate'    : Joi.object().keys( {
+  		'username'     : Joi.string().alphanum().min( 3 ).max( 30 ).required(),
+  		'password'     : Joi.string().regex( /[a-zA-Z0-9]{3,30}/ ),
+  		'access_token' : [ Joi.string(), Joi.number() ],
+  		'birthyear'    : Joi.number().integer().min( 1900 ).max( 2013 ),
+  		'email'        : Joi.string().email()
+  	} ).with( 'username', 'birthyear' ).without( 'password', 'access_token' ),
 
-var rabbit       = require( 'wascally' );
-var lapinOptions = {
-	'rabbit'     : rabbit,
-	'logService' : {
-		'prefix' : 'v1.logs.logService'
-	}
-};
+    'validateOptions' : {} // <optional> see https://github.com/hapijs/joi for validation options
 
-var lapin  = require( 'lapin' )( lapinOptions );
+} , function ( message, respond ) {
+    // consumer process
+} );
+
 ```
-Another service listening to `v1.logs.logService` should be receiving the log details sent. Logger thorough a service is using send/receive pattern.
-
-#### Attaching a logger object
-
- *** under development **
-
-#### No logging
-When no logging involved - require lapin this way:
+If validation fails, lapin will bypass respond callback and response a fail status as seen below:
 ```javascript
-var rabbit = require( 'wascally' );
-var lapin  = require( 'lapin' )( rabbit );
-```
-
+    respond( {
+        'status' : 'fail',
+        'data'   : <Validation error message>
+    } );
+````
+Please refer to [Joi Validation](https://github.com/hapijs/joi) for validation examples, structure and validation options
 
 ## Contributing
 All pull requests must follow [coding conventions and standards](https://github.com/School-Improvement-Network/coding-conventions).

@@ -44,21 +44,21 @@ describe( 'Perform publish subscribe', function () {
 
 	describe( 'WITHOUT payload', function () {
 
-		var errorData;
+		var failData;
 
 		before( function ( done ) {
 			var payload;
 			lapin.publish( 'v1.pubtest.get', payload, function ( error ) {
-				errorData = error;
+				failData = error;
 				done();
 			} );
 		} );
 
-		it( '-- should subscribed errorData in publish', function () {
+		it( '-- should subscribed failData in publish', function () {
 
-			expect( errorData ).be.an( 'object' );
-			expect( errorData.status ).to.exist.and.to.equal( 'error' );
-			expect( errorData.message ).to.exist.and.to.equal( 'Invalid data' );
+			expect( failData ).be.an( 'object' );
+			expect( failData.status ).to.exist.and.to.equal( 'fail' );
+			expect( failData.message ).to.exist.and.to.equal( 'Invalid data' );
 
 		} );
 
