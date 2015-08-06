@@ -62,6 +62,59 @@ describe( 'Perform request respond', function () {
 
 	} );
 
+	describe( '- Success with options -', function () {
+
+		var response;
+		var errorResponse;
+		var request;
+
+		before( function ( done ) {
+
+			lapin.respond( {
+				'messageType' : 'v1.reqrestestOpts.get',
+				'limit'       : 1,
+				'exchange'    : 'opts'
+			}, function ( requestData, send ) {
+				request = requestData;
+				send.success( 'users' );
+			} )
+
+				.on( 'error', done )
+				.on( 'ready', function () {
+
+					lapin.request( {
+						'messageType' : 'v1.reqrestestOpts.get',
+						'exchange'    : 'opts'
+					}, { 'user' : 'Testfoo' }, function ( error, data ) {
+						response      = data;
+						errorResponse = error;
+						setTimeout( done, 1000 );
+					} );
+
+				} );
+		} );
+
+		it( '-- should receive correct requestData', function () {
+
+			expect( request ).be.an( 'object' );
+			expect( request.user ).to.exist.and.to.equal( 'Testfoo' );
+
+		} );
+
+		it( '-- should return SUCCESS data', function () {
+
+			expect( response ).be.an( 'object' );
+			expect( response.status ).to.exist.and.to.equal( 'success' );
+			expect( response.data ).to.exist.and.to.equal( 'users' );
+
+		} );
+
+		it( '-- should have a null error response', function () {
+			expect( errorResponse ).to.be.an( 'null' );
+
+		} );
+
+	} );
 	describe( '- Success with JOI Validation -', function () {
 
 		var response;

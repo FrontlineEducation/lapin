@@ -51,6 +51,47 @@ describe( 'Perform Send Receive', function () {
 		} );
 	} );
 
+	describe( 'WITH payload and OPTIONS', function () {
+
+		var received;
+		var receivedData;
+		var payload = { 'user' : 'Testfoo' };
+
+		before( function ( done ) {
+
+			lapin.receive( {
+				'messageType' : 'v1.sendrectestOpts.get',
+				'limit'       : 1,
+				'noBatch'     : true
+			}, function ( data, callback ) {
+				receivedData = data;
+				callback();
+			} )
+				.on( 'error', done )
+				.on( 'ready', function () {
+					lapin.send( 'v1.sendrectestOpts.get', payload, function ( error, data ) {
+						received = data;
+						setTimeout( done, 1000 );
+					} );
+				} );
+		} );
+
+		it( '-- should RECEIVED correct data', function () {
+
+			expect( receivedData ).be.an( 'object' );
+			expect( receivedData.user ).to.equal( 'Testfoo' );
+
+		} );
+
+		it( '-- should SEND success data', function () {
+
+			expect( received ).be.an( 'object' );
+			expect( received.status ).to.exist.and.to.equal( 'success' );
+			expect( received.message ).to.exist.and.to.equal( 'Message sent' );
+
+		} );
+	} );
+
 	describe( 'WITHOUT payload', function () {
 
 		var received;

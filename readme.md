@@ -28,10 +28,21 @@ The following are simple usage examples:
 
 **Send / Receive**
 
-***Send***
+***Sender Options***
+
+	exchange, messageType, routingKey, autoDelete
+
+Please refer to [Rabbus](https://github.com/derickbailey/rabbus) options' info
+
+***Sender***
 ```javascript
-// Sender
-lapin.send( 'v1.logs.log', message, function ( error, response ) {
+options = 'v1.logs.log';
+// or
+options = {
+    'messageType' : 'v1.logs.log',
+    'exchange'    : 'logs'
+}
+lapin.send( options , message, function ( error, response ) {
 
 	// handling the response is optional
 	if ( !error ) {
@@ -53,10 +64,20 @@ lapin.sendPromise( 'v1.logs.log', message )
 	} );
 ```
 
-***Receive***
+***Receiver Options***
+
+	queue, exchange, messageType, autoDelete, limit, noBatch
+
+***Receiver***
 ```javascript
-// Receiver
-lapin.receive( 'v1.logs.log', function ( message, done ) {
+options = 'v1.logs.log';
+// or
+options = {
+    'messageType' : 'v1.logs.log',
+    'exchange'    : logs
+}
+
+lapin.receive( options, function ( message, done ) {
 
 	someDatabaseQuery( message, function ( err, body ) {
 
@@ -73,9 +94,19 @@ lapin.receive( 'v1.logs.log', function ( message, done ) {
 
 **Publish / Subscribe**
 
+***Publisher Options***
+
+	exchange, messageType, autoDelete
+
+***Publisher***
 ```javascript
-// Publisher
-lapin.publish( 'v1.users.login', message, function ( error, response ) {
+options = 'v1.users.login';
+// or
+options = {
+    'messageType' : 'v1.users.login',
+    'exchange'    : 'users' // recommended not to prefix or suffix `exchange` lapin will do it for us
+}
+lapin.publish( options, message, function ( error, response ) {
 
 		// handling the response is optional
 	if ( !error ) {
@@ -83,10 +114,21 @@ lapin.publish( 'v1.users.login', message, function ( error, response ) {
 	}
 
 } );
+```
+***Subscriber Options***
 
+	queue, exchange, messageType, autoDelete, limit, noBatch
 
-// Subscriber
-lapin.subscribe( 'v1.users.login', function ( message, done ) {
+***Subscriber***
+```
+options = 'v1.users.login';
+// or
+options = {
+    'messageType' : 'v1.users.login',
+    'queue'       : 'users' // recommended not to put `queue` suffix or prefix, lapin will do it for you
+    'exchange'    : 'users'
+}
+lapin.subscribe( options, function ( message, done ) {
 
 	someDatabaseQuery( message, function ( err, body ) {
 
@@ -103,10 +145,19 @@ lapin.subscribe( 'v1.users.login', function ( message, done ) {
 
 **Request / Response**
 
-***Request***
+***Request Options***
+
+	exchange, messageType, autoDelete, routingKey, forceAck
+
+***Requester***
 ```javascript
-// Requester
-lapin.request( 'v1.users.findAll', message, function ( error, data ) {
+options = 'v1.users.findAll'
+// or
+options = {
+    'messageType' : 'v1.users.findAll',
+    'exchange'    : 'users'
+}
+lapin.request( options, message, function ( error, data ) {
 
 	if ( error ) {
 		return reply( error ).code( 500 );
@@ -127,10 +178,20 @@ lapin.requestPromise( 'v1.users.findAll', message )
 		// Handle error
 	} );
 ```
-***Response***
+
+***Responder Options***
+
+	exchange, queue, autoDelete, routingKey, limit, noBatch
+
+***Responder***
 ```javascript
-// Responder
-lapin.respond( 'v1.users.findAll', function ( message, respond ) {
+options = 'v1.users.findAll';
+// or
+options = {
+    'messageType' : 'v1.users.findAll',
+    'limit'       : 1
+}
+lapin.respond( options, function ( message, respond ) {
 
 	if ( message.invalid ) {
 			return respond.fail( 'Invalid data' );
@@ -185,6 +246,12 @@ If validation fails, lapin will bypass respond callback and response a fail stat
 ````
 Please refer to [Joi Validation](https://github.com/hapijs/joi) for validation examples, structure and validation options
 
+#### To Consider ####
+Make sure to use the same messageType, routingKey and exchange options.
+Whenever a `String` option is supplied instead of the `Object` option, lapin will automatically create the ff:
+ - exchange and messageType ( Producer )
+ - exchange, messageType and queue ( Consumer )
+
 ## Contributing
 All pull requests must follow [coding conventions and standards](https://github.com/School-Improvement-Network/coding-conventions).
 
@@ -210,7 +277,7 @@ In general, doing RPC over RabbitMQ is easy. A client sends a request message an
 
 * **queue:** `<pattern>`.<resource>-queue
 
-###Where
+### Where
 `Patterns:`
 
 - req-res
