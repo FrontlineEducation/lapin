@@ -2,22 +2,19 @@
 
 /* eslint no-process-exit:0 */
 
-// load third party modules
-var del      = require( 'del' );
-var gulp     = require( 'gulp' );
-var mocha    = require( 'gulp-mocha' );
-var istanbul = require( 'gulp-istanbul' );
-var colors   = require( 'colors/safe' );
+var colors      = require( 'colors/safe' );
+var del         = require( 'del' );
+var enforcement = require( '@sinet/coverage-enforcement' );
+var gulp        = require( 'gulp' );
+var istanbul    = require( 'gulp-istanbul' );
+var mocha       = require( 'gulp-mocha' );
 
 gulp.task( 'clean-coverage', function () {
 	del( [ 'instrumented' ] );
 } );
 
 gulp.task( 'test', [ 'clean-coverage' ], function () {
-
-	var covEnforcerOpts = {
-		'thresholds' : require( 'sinet-istanbul-coverage-enforcement' )
-	};
+	var covEnforcerOpts = { 'thresholds' : enforcement.thresholds };
 
 	var paths = {
 		'cover' : [
@@ -40,7 +37,6 @@ gulp.task( 'test', [ 'clean-coverage' ], function () {
 		'coverage' : 'instrumented'
 	};
 
-	var coverageDir  = paths.coverage;
 	var mochaOptions = {
 		'ui'       : 'bdd',
 		'reporter' : 'spec',
@@ -64,14 +60,20 @@ gulp.task( 'test', [ 'clean-coverage' ], function () {
 				) )
 
 				.pipe( istanbul.writeReports( {
-					'dir'        : coverageDir,
-					'reportOpts' : { 'dir' : coverageDir },
-					'reporters'  : [ 'text', 'text-summary', 'json', 'html' ]
+					'dir'       : paths.coverage,
+					'reporters' : enforcement.reporters,
+
+					'reportOpts' : {
+						'dir'        : paths.coverage,
+						'watermarks' : enforcement.watermarks
+					}
 				} ) )
 
 				.pipe( istanbul.enforceThresholds( covEnforcerOpts )
 					.on( 'error', function () {
 						console.log( 'error - coverage enforcer' );
+						enforcement.log();
+
 						process.exit( 1 );
 					} ) )
 
@@ -80,6 +82,8 @@ gulp.task( 'test', [ 'clean-coverage' ], function () {
 				} )
 
 				.on( 'end', function () {
+					enforcement.log();
+
 					process.exit();
 				} );
 		} );
@@ -110,4 +114,3 @@ gulp.task( 'inspect-queues', function () {
 	}, 2000 );
 
 } );
-
