@@ -5,7 +5,7 @@
 
 var Joi      = require( 'joi' );
 var expect   = require( 'chai' ).expect;
-var validate = require( process.cwd() + '/lib/validate' );
+var validate = require( process.cwd() + '/lib/req-res/validate' );
 
 describe( 'Validation Joi wrapper', function () {
 

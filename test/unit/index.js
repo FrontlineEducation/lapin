@@ -1,9 +1,11 @@
 'use strict';
 
-var expect   = require( 'chai' ).expect;
-var wascally = require( 'wascally' );
+var requireNew = require( 'require-new' );
+var expect     = require( 'chai' ).expect;
+var wascally   = require( 'wascally' );
+var config     = require( process.cwd() + '/lib/config' );
 
-describe( 'lapin', function () {
+describe( 'lapin with wascally', function () {
 
 	var lapin;
 
@@ -40,6 +42,30 @@ describe( 'lapin', function () {
 		var anotherLapin = require( process.cwd() + '/index' )( wascally );
 		expect( anotherLapin ).to.equal( lapin );
 
+	} );
+
+} );
+
+describe( 'lapin without passing wascally', function () {
+
+	before( function () {
+		requireNew( process.cwd() + '/index' )();
+	} );
+
+	it( '-- should use local wascally for rabbit', function () {
+		expect( config.rabbit ).equal( wascally );
+	} );
+
+} );
+
+describe( 'lapin with wascally wrapped in an object', function () {
+
+	before( function () {
+		requireNew( process.cwd() + '/index' )( { 'rabbit' : wascally } );
+	} );
+
+	it( '-- should use local wascally for rabbit', function () {
+		expect( config.rabbit ).equal( wascally );
 	} );
 
 } );

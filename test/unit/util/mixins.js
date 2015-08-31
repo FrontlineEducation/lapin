@@ -4,7 +4,7 @@
 /* eslint no-unused-expressions:0 */
 
 var expect = require( 'chai' ).expect;
-var mixins = require( process.cwd() + '/lib/mixins' );
+var mixins = require( process.cwd() + '/lib/util/mixins' );
 
 describe( 'mixins', function () {
 

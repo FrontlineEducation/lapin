@@ -15,7 +15,7 @@ describe( 'Status', function () {
 			response = data;
 		};
 
-		status = require( process.cwd() + '/lib/status' )( respond );
+		status = require( process.cwd() + '/lib/req-res/status' )( respond );
 	} );
 
 	it( 'should return success data', function () {

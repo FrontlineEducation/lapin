@@ -33,7 +33,7 @@ gulp.task( 'test', [ 'clean-coverage' ], function () {
 			'!test/**'
 		],
 
-		'test'     : [ 'test/it/**/*.js', 'test/unit/**/*.js' ],
+		'test'     : [ 'test/unit/**/*.js', 'test/it/**/*.js' ],
 		'coverage' : 'instrumented'
 	};
 
@@ -54,7 +54,8 @@ gulp.task( 'test', [ 'clean-coverage' ], function () {
 
 				.pipe(
 					mocha( mochaOptions )
-						.on( 'error', function () {
+						.on( 'error', function ( mochaError ) {
+							console.log( mochaError.stack );
 							process.exit( 1 );
 						}
 				) )
