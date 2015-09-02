@@ -12,7 +12,7 @@ var ReqRes  = require( './lib/req-res' );
 var SendRec = require( './lib/send-rec' );
 var PubSub  = require( './lib/pub-sub' );
 
-function Lapin ( options ) {
+function Lapin () {
 
 	// Initialize patterns
 	var reqRes  = new ReqRes();
