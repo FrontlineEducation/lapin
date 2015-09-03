@@ -18,7 +18,6 @@ describe( 'Perform publish subscribe', function () {
 		var published;
 		var payload   = { 'user' : 'Testfoo' };
 		var errorData = null;
-
 		before( function ( done ) {
 
 			lapin.subscribe( 'v1.pubtest.get', function ( data ) {

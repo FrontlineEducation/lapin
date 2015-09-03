@@ -44,13 +44,16 @@ describe( 'publish and subscribe', function () {
 		var Consumer;
 		var pubSub;
 		before( function () {
-			pubSub   = new PubSub();
-			Consumer = PubSub.__get__( 'Subscriber' );
-			PubSub.__set__( 'Subscriber', helper.Consumer );
+			pubSub             = new PubSub();
+			Consumer           = PubSub.__get__( 'consumer' );
+			var consumerHelper = {
+				'get' : helper.getNewConsumer
+			};
+			PubSub.__set__( 'consumer', consumerHelper );
 		} );
 
 		after( function () {
-			PubSub.__set__( 'Subscriber', Consumer );
+			PubSub.__set__( 'consumer', Consumer );
 		} );
 
 		it( 'should accept a string', function ( done ) {
@@ -65,6 +68,14 @@ describe( 'publish and subscribe', function () {
 				expect( data ).to.equal( 'done' );
 				done();
 			} );
+		} );
+
+		it( 'should return an error when invalid messagetType', function ( done ) {
+			pubSub.subscribe( [ 'v1.session.get' ], function () {} )
+				.on( 'error', function () {
+					expect( true ).to.be.true;
+					done();
+				} );
 		} );
 
 	} );

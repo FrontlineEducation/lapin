@@ -44,13 +44,16 @@ describe( 'send and receive', function () {
 		var Consumer;
 		var sendRec;
 		before( function () {
-			sendRec  = new SendRec();
-			Consumer = SendRec.__get__( 'Receiver' );
-			SendRec.__set__( 'Receiver', helper.Consumer );
+			sendRec            = new SendRec();
+			Consumer           = SendRec.__get__( 'consumer' );
+			var consumerHelper = {
+				'get' : helper.getNewConsumer
+			};
+			SendRec.__set__( 'consumer', consumerHelper );
 		} );
 
 		after( function () {
-			SendRec.__set__( 'Receiver', Consumer );
+			SendRec.__set__( 'consumer', Consumer );
 		} );
 
 		it( 'should accept a string', function ( done ) {
@@ -67,6 +70,13 @@ describe( 'send and receive', function () {
 			} );
 		} );
 
+		it( 'should return an error when invalid messagetType', function ( done ) {
+			sendRec.receive( [ 'v1.session.get' ], function () {} )
+				.on( 'error', function () {
+					expect( true ).to.be.true;
+					done();
+				} );
+		} );
 	} );
 } );
 

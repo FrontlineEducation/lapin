@@ -131,5 +131,15 @@ describe( 'Requester', function () {
 			done();
 		} );
 	} );
+
+	it( 'should emit error when option is invalid', function ( done ) {
+		var LapinError = new Requester( { 'messageType' : 'v1.consu' } );
+		LapinError
+			.on( 'error', function ( error ) {
+				console.log( error );
+				expect( error ).to.be.instanceof( Error );
+				done();
+			} );
+	} );
 } );
 

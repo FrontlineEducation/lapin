@@ -31,7 +31,7 @@ describe( 'request and respond', function () {
 			} );
 		} );
 
-		it( 'should accept a object option', function ( done ) {
+		it( 'should accept an object option', function ( done ) {
 			reqRes.request( { 'messageType' : 'v1.session.get' }, { 'token' : '123' }, function ( data ) {
 				expect( data.token ).to.equal( '123' );
 				done();
@@ -43,14 +43,19 @@ describe( 'request and respond', function () {
 	describe( 'responder', function () {
 		var Consumer;
 		var reqRes;
+
 		before( function () {
 			reqRes   = new ReqRes();
-			Consumer = ReqRes.__get__( 'Responder' );
-			ReqRes.__set__( 'Responder', helper.Consumer );
+			Consumer = ReqRes.__get__( 'consumer' );
+			var consumerHelper = {
+				'get' : helper.getNewConsumer
+			};
+
+			ReqRes.__set__( 'consumer', consumerHelper );
 		} );
 
 		after( function () {
-			ReqRes.__set__( 'Responder', Consumer );
+			ReqRes.__set__( 'consumer', Consumer );
 		} );
 
 		it( 'should accept a string', function ( done ) {
@@ -60,11 +65,19 @@ describe( 'request and respond', function () {
 			} );
 		} );
 
-		it( 'should accept a object option', function ( done ) {
+		it( 'should accept an object option', function ( done ) {
 			reqRes.respond( { 'messageType' : 'v1.session.get' }, function ( data ) {
 				expect( data ).to.equal( 'done' );
 				done();
 			} );
+		} );
+
+		it( 'should return an error when invalid messagetType', function ( done ) {
+			reqRes.respond( [ 'v1.session.get' ], function () {} )
+				.on( 'error', function () {
+					expect( true ).to.be.true;
+					done();
+				} );
 		} );
 
 	} );

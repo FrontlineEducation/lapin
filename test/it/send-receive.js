@@ -22,13 +22,13 @@ describe( 'Perform Send Receive', function () {
 
 		before( function ( done ) {
 
-			lapin.receive( 'v1.sendrectest.get', function ( data, callback ) {
+			lapin.receive( 'v1.sendreceivetest.get', function ( data, callback ) {
 				receivedData = data;
 				callback();
 			} )
 				.on( 'error', done )
 				.on( 'ready', function () {
-					lapin.send( 'v1.sendrectest.get', payload, function ( error, data ) {
+					lapin.send( 'v1.sendreceivetest.get', payload, function ( error, data ) {
 						received = data;
 						setTimeout( done, 1000 );
 					} );
