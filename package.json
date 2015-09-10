@@ -7,7 +7,8 @@
     "test": "gulp test && gulp inspect-queues",
     "jshint": "jshint",
     "eslint": "eslint",
-    "jscs": "jscs"
+    "jscs": "jscs",
+    "nsp" : "nsp"
   },
   "repository": {
     "type": "git",
@@ -38,6 +39,7 @@
     "jscs": "^1.12.0",
     "jshint": "^2.6.3",
     "mocha": "^2.2.5",
+    "nsp": "^1.1.0",
     "request": "^2.60.0",
     "require-new": "^1.1.0",
     "rewire": "^2.3.4",

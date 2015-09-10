@@ -29,5 +29,9 @@ script:
   - npm run eslint -- --reset --eslintrc ./
   - npm run jscs -- ./
 
+  # Check packages with known and public vulnerable dependencies
+  - npm run nsp -- audit-package
+  - npm run nsp -- audit-shrinkwrap
+
   # Run unit tests (and check for coverage)
   - npm test

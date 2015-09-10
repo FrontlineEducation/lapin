@@ -11,6 +11,8 @@ runs=(
 	"jshint -- ./"
 	"eslint -- --reset --eslintrc ./"
 	"jscs -- ./"
+	"nsp -- audit-package"
+	"nsp -- audit-shrinkwrap"
 	"test"
 )
 
