@@ -1,29 +1,11 @@
-sudo: false
-
-language: node_js
-
-node_js:
-  - "0.10.28"
-
-env:
-  global:
-    - NODE_ENV=travis
-
-services:
-  - rabbitmq
-
-addons:
-  hosts:
-    - rabbitmq
-
-before_install:
-  - npm install -g npm
-
-install:
+machine:
+ node:
+  version: 0.10.36
+dependencies:
+ override:
   - npm install
-
-script:
-
+test:
+ override:
   # Detect errors and potential problems
   - npm run jshint -- ./
   - npm run eslint -- --reset --eslintrc ./
