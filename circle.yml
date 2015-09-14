@@ -1,29 +1,16 @@
-sudo: false
-
-language: node_js
-
-node_js:
-  - "0.10.28"
-
-env:
-  global:
-    - NODE_ENV=travis
-
-services:
-  - rabbitmq
-
-addons:
-  hosts:
-    - rabbitmq
-
-before_install:
-  - npm install -g npm
-
-install:
+machine:
+ node:
+  version: 0.12.0
+ hosts:
+  rabbitmq: 127.0.0.1
+ services:
+  - docker
+dependencies:
+ override:
   - npm install
-
-script:
-
+  - docker run -d -p 15672:15672 --name rabbitmq rabbitmq:3.5-management
+test:
+ override:
   # Detect errors and potential problems
   - npm run jshint -- ./
   - npm run eslint -- --reset --eslintrc ./
