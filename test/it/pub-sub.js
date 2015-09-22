@@ -49,14 +49,14 @@ describe( 'Perform publish subscribe', function () {
 		before( function ( done ) {
 
 			lapin.subscribe( {
-				'messageType' : 'v1.pubtestOpts.get',
+				'messageType' : 'v1.pubtest-opts.get',
 				'limit'       : 1
 			}, function ( data ) {
 				published = data;
 			} )
 				.on( 'error', done )
 				.on( 'ready', function () {
-					lapin.publish( 'v1.pubtestOpts.get', payload, function ( error ) {
+					lapin.publish( 'v1.pubtest-opts.get', payload, function ( error ) {
 						errorData = error;
 						setTimeout( done, 1000 );
 					} );

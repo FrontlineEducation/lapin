@@ -33,7 +33,7 @@ gulp.task( 'test', [ 'clean-coverage' ], function () {
 			'!test/**'
 		],
 
-		'test'     : [ 'test/unit/**/*.js', 'test/it/**/*.js' ],
+		'test'     : [ 'test/it/**/*.js', 'test/unit/**/*.js' ],
 		'coverage' : 'instrumented'
 	};
 

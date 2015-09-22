@@ -21,14 +21,14 @@ describe( 'Perform Send( PROMISE ) Receive', function () {
 
 	before( function ( done ) {
 
-		lapin.receive( 'v1.sendrecPromise.get', function ( data, callback ) {
+		lapin.receive( 'v1.sendrec-promise.get', function ( data, callback ) {
 			receivedData = data;
 			callback();
 		} )
 		.on( 'error', done )
 		.on( 'ready', function () {
 
-			lapin.sendPromise( 'v1.sendrecPromise.get', payload )
+			lapin.sendPromise( 'v1.sendrec-promise.get', payload )
 				.then( function ( data ) {
 					received = data;
 				} )

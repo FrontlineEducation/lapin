@@ -22,7 +22,7 @@ describe( 'Perform request( PROMISE )  respond', function () {
 
 		before( function ( done ) {
 
-			lapin.respond( 'v1.reqresPromise.get', function ( requestData, send ) {
+			lapin.respond( 'v1.reqres-promise.get', function ( requestData, send ) {
 				request = requestData;
 				send.success( 'users' );
 			} )
@@ -30,7 +30,7 @@ describe( 'Perform request( PROMISE )  respond', function () {
 				.on( 'error', done )
 				.on( 'ready', function () {
 
-					lapin.requestPromise( 'v1.reqresPromise.get', { 'user' : 'Testfoo' } )
+					lapin.requestPromise( 'v1.reqres-promise.get', { 'user' : 'Testfoo' } )
 						.then( function ( data ) {
 							response = data;
 						} )
@@ -74,7 +74,7 @@ describe( 'Perform request( PROMISE )  respond', function () {
 
 		before( function ( done ) {
 
-			lapin.respond( 'v1.reqresPromise.post', function ( requestData, send ) {
+			lapin.respond( 'v1.reqres-promise.post', function ( requestData, send ) {
 				request   = requestData;
 				var error = new Error( 'Something went wrong' );
 				send.error( error.message, error, 500 );
@@ -82,7 +82,7 @@ describe( 'Perform request( PROMISE )  respond', function () {
 				.on( 'error', done )
 				.on( 'ready', function () {
 
-					lapin.requestPromise( 'v1.reqresPromise.post', { 'user' : 'Foo' } )
+					lapin.requestPromise( 'v1.reqres-promise.post', { 'user' : 'Foo' } )
 						.then( function ( data ) {
 							response = data;
 						} )
@@ -128,14 +128,14 @@ describe( 'Perform request( PROMISE )  respond', function () {
 
 		before( function ( done ) {
 
-			lapin.respond( 'v1.reqresPromise.put', function ( requestData, send ) {
+			lapin.respond( 'v1.reqres-promise.put', function ( requestData, send ) {
 				request = requestData;
 				send.fail( 'Invalid data' );
 			} )
 				.on( 'error', done )
 				.on( 'ready', function () {
 
-					lapin.requestPromise( 'v1.reqresPromise.put', { 'user' : 'Foo' } )
+					lapin.requestPromise( 'v1.reqres-promise.put', { 'user' : 'Foo' } )
 						.then( function ( data ) {
 							response = data;
 						} )

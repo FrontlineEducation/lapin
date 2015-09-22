@@ -23,7 +23,7 @@ describe( 'Perform request respond multiple message types', function () {
 		before( function ( done ) {
 
 			lapin.respond( {
-				'messageType' : [ 'v1.sessions.get', 'v1.consumers.post' ]
+				'messageType' : [ 'v1.sessions-test-mul.get', 'v1.consumers-test-mul.post' ]
 			}, function ( requestData, send ) {
 				request = requestData;
 				send.success( 'users' );
@@ -31,7 +31,7 @@ describe( 'Perform request respond multiple message types', function () {
 
 				.on( 'error', done )
 				.on( 'ready', function ( responder ) {
-					var messageType = 'v1.consumers.post';
+					var messageType = 'v1.consumers-test-mul.post';
 					if ( responder.messageType.slice( 8 ) === messageType ) {
 						lapin.request( messageType, { 'user' : 'Testfoo' }, function ( error, data ) {
 							response      = data;

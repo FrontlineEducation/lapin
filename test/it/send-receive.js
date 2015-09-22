@@ -60,7 +60,7 @@ describe( 'Perform Send Receive', function () {
 		before( function ( done ) {
 
 			lapin.receive( {
-				'messageType' : 'v1.sendrectestOpts.get',
+				'messageType' : 'v1.sendrectest-opts.get',
 				'limit'       : 1,
 				'noBatch'     : true
 			}, function ( data, callback ) {
@@ -69,7 +69,7 @@ describe( 'Perform Send Receive', function () {
 			} )
 				.on( 'error', done )
 				.on( 'ready', function () {
-					lapin.send( 'v1.sendrectestOpts.get', payload, function ( error, data ) {
+					lapin.send( 'v1.sendrectest-opts.get', payload, function ( error, data ) {
 						received = data;
 						setTimeout( done, 1000 );
 					} );

@@ -71,7 +71,7 @@ describe( 'Perform request respond', function () {
 		before( function ( done ) {
 
 			lapin.respond( {
-				'messageType' : 'v1.reqrestestOpts.get',
+				'messageType' : 'v1.reqrestest-opts.get',
 				'limit'       : 1,
 				'exchange'    : 'opts'
 			}, function ( requestData, send ) {
@@ -83,7 +83,7 @@ describe( 'Perform request respond', function () {
 				.on( 'ready', function () {
 
 					lapin.request( {
-						'messageType' : 'v1.reqrestestOpts.get',
+						'messageType' : 'v1.reqrestest-opts.get',
 						'exchange'    : 'opts'
 					}, { 'user' : 'Testfoo' }, function ( error, data ) {
 						response      = data;
@@ -130,7 +130,7 @@ describe( 'Perform request respond', function () {
 		before( function ( done ) {
 
 			lapin.respond( {
-				'messageType' : 'v1.reqrestestJoi.get',
+				'messageType' : 'v1.reqrestest-joi.get',
 				'validate'    : Joi.object().keys( {
 					'username'     : Joi.string().alphanum().min( 3 ).max( 30 ).required(),
 					'password'     : Joi.string().regex( /[a-zA-Z0-9]{3,30}/ ),
@@ -147,7 +147,7 @@ describe( 'Perform request respond', function () {
 				.on( 'error', done )
 				.on( 'ready', function () {
 
-					lapin.request( 'v1.reqrestestJoi.get', validationData, function ( error, data ) {
+					lapin.request( 'v1.reqrestest-joi.get', validationData, function ( error, data ) {
 						response      = data;
 						errorResponse = error;
 						setTimeout( done, 1000 );
@@ -194,7 +194,7 @@ describe( 'Perform request respond', function () {
 		before( function ( done ) {
 
 			lapin.respond( {
-				'messageType' : 'v1.reqrestestJoiFail.get',
+				'messageType' : 'v1.reqrestest-joi-fail.get',
 				'validate'    : Joi.object().keys( {
 					'username'     : Joi.string().alphanum().min( 3 ).max( 30 ).required(),
 					'password'     : Joi.string().regex( /[a-zA-Z0-9]{3,30}/ ),
@@ -212,7 +212,7 @@ describe( 'Perform request respond', function () {
 				.on( 'error', done )
 				.on( 'ready', function () {
 
-					lapin.request( 'v1.reqrestestJoiFail.get', validationData, function ( error, data ) {
+					lapin.request( 'v1.reqrestest-joi-fail.get', validationData, function ( error, data ) {
 						response     = data;
 						failResponse = error;
 						setTimeout(  done, 1000 );

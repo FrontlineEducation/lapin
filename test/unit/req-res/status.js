@@ -58,7 +58,7 @@ describe( 'Status', function () {
 		expect( response.status ).to.equal( 'error' );
 		expect( response.data ).to.be.an.Object;
 		expect( response.message ).to.equal( error );
-		expect( response.code ).to.equal( 500 );
+		expect( response.code ).to.equal( 0 );
 	} );
 
 	it( 'should return fail data', function () {
