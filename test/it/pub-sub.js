@@ -88,7 +88,7 @@ describe( 'Perform publish subscribe', function () {
 
 			expect( failData ).be.an( 'object' );
 			expect( failData.status ).to.exist.and.to.equal( 'fail' );
-			expect( failData.message ).to.exist.and.to.equal( 'Invalid data' );
+			expect( failData.data ).to.exist.and.to.equal( 'Invalid data' );
 
 		} );
 

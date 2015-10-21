@@ -51,7 +51,7 @@ describe( 'Perform Send Receive multiple messageTypes', function () {
 
 			expect( received ).be.an( 'object' );
 			expect( received.status ).to.exist.and.to.equal( 'success' );
-			expect( received.message ).to.exist.and.to.equal( 'Message sent' );
+			expect( received.data ).to.exist.and.to.equal( 'Message sent' );
 
 		} );
 	} );

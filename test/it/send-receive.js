@@ -46,7 +46,7 @@ describe( 'Perform Send Receive', function () {
 
 			expect( received ).be.an( 'object' );
 			expect( received.status ).to.exist.and.to.equal( 'success' );
-			expect( received.message ).to.exist.and.to.equal( 'Message sent' );
+			expect( received.data ).to.exist.and.to.equal( 'Message sent' );
 
 		} );
 	} );
@@ -87,7 +87,7 @@ describe( 'Perform Send Receive', function () {
 
 			expect( received ).be.an( 'object' );
 			expect( received.status ).to.exist.and.to.equal( 'success' );
-			expect( received.message ).to.exist.and.to.equal( 'Message sent' );
+			expect( received.data ).to.exist.and.to.equal( 'Message sent' );
 
 		} );
 	} );
@@ -116,7 +116,7 @@ describe( 'Perform Send Receive', function () {
 
 			expect( failData ).be.an( 'object' );
 			expect( failData.status ).to.exist.and.to.equal( 'fail' );
-			expect( failData.message ).to.exist.and.to.equal( 'Invalid data' );
+			expect( failData.data ).to.exist.and.to.equal( 'Invalid data' );
 
 		} );
 
