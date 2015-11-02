@@ -6,13 +6,15 @@
 var expect = require( 'chai' ).expect;
 var rabbit = require( 'wascally' );
 var Lapin  = require( process.cwd() );
-var lapin  = new Lapin( rabbit );
 var Joi    = require( 'joi' );
 
 describe( 'Perform request respond', function () {
 
+	var lapin;
+
 	before( function ( done ) {
-		require( './init' )( done );
+		lapin = new Lapin( rabbit );
+		require( '../init' )( done );
 	} );
 
 	describe( '- Success -', function () {

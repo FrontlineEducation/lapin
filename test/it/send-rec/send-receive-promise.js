@@ -6,17 +6,18 @@
 var expect = require( 'chai' ).expect;
 var rabbit = require( 'wascally' );
 var Lapin  = require( process.cwd() );
-var lapin  = new Lapin( rabbit );
 
 describe( 'Perform Send( PROMISE ) Receive', function () {
 
+	var lapin;
 	var received     = null;
 	var receivedData = null;
 	var errorData    = null;
 	var payload      = { 'user' : 'Testfoo' };
 
 	before( function ( done ) {
-		require( './init' )( done );
+		lapin = new Lapin( rabbit );
+		require( '../init' )( done );
 	} );
 
 	before( function ( done ) {

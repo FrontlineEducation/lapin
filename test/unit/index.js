@@ -46,7 +46,7 @@ describe( 'lapin with wascally', function () {
 
 } );
 
-describe( 'lapin without passing wascally', function () {
+describe( 'lapin with no options', function () {
 
 	before( function () {
 		requireNew( process.cwd() + '/index' )();
@@ -58,7 +58,7 @@ describe( 'lapin without passing wascally', function () {
 
 } );
 
-describe( 'lapin with wascally wrapped in an object', function () {
+describe( 'lapin as options as object with wascally without logger', function () {
 
 	before( function () {
 		requireNew( process.cwd() + '/index' )( { 'rabbit' : wascally } );
@@ -66,6 +66,18 @@ describe( 'lapin with wascally wrapped in an object', function () {
 
 	it( '-- should use local wascally for rabbit', function () {
 		expect( config.rabbit ).equal( wascally );
+	} );
+
+} );
+
+describe( 'lapin with logger as options without wascally', function () {
+
+	before( function () {
+		requireNew( process.cwd() + '/index' )( { 'logger' : console.log } );
+	} );
+
+	it( '-- should use local wascally for rabbit', function () {
+		expect( config.logger ).equal( console.log );
 	} );
 
 } );

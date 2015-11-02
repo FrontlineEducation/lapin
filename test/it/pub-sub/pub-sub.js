@@ -6,12 +6,14 @@
 var expect = require( 'chai' ).expect;
 var rabbit = require( 'wascally' );
 var Lapin  = require( process.cwd() );
-var lapin  = new Lapin( rabbit );
 
 describe( 'Perform publish subscribe', function () {
 
+	var lapin;
+
 	before( function ( done ) {
-		require( './init' )( done );
+		lapin = new Lapin( rabbit );
+		require( '../init' )( done );
 	} );
 
 	describe( 'WITH payload', function () {

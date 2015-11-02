@@ -17,8 +17,7 @@ test:
   - npm run jscs -- ./
 
   # Check packages with known and public vulnerable dependencies
-  - npm run nsp -- audit-package
-  - npm run nsp -- audit-shrinkwrap
+  - npm run nsp -- check --warn-only
 
   # Run unit tests (and check for coverage)
   - npm test

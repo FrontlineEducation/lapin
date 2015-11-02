@@ -3,7 +3,8 @@
 /* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var expect = require( 'chai' ).expect;
+var expect  = require( 'chai' ).expect;
+var Emitter = require( 'events' ).EventEmitter;
 
 describe( 'Status', function () {
 
@@ -15,7 +16,12 @@ describe( 'Status', function () {
 			response = data;
 		};
 
-		status = require( process.cwd() + '/lib/req-res/status' )( respond );
+		status = require( process.cwd() + '/lib/req-res/status' )( {
+			'respond' : respond,
+			'log'     : require( process.cwd() + '/lib/logger' )( {
+				'emitter' : new Emitter()
+			} )
+		} );
 	} );
 
 	it( 'should return success data', function () {

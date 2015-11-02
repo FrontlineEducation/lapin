@@ -1,6 +1,7 @@
 'use strict';
 
 // Require bluebird
+var _        = require( 'lodash' );
 var bluebird = require( 'bluebird' );
 var config   = require( './lib/config' ); // sudo global
 
@@ -45,9 +46,17 @@ function setConfigs ( options ) {
 	config.rabbit = options;
 	if ( !options ) {
 		config.rabbit = require( 'wascally' );
-	} else if ( options.rabbit ) {
-		config.rabbit = options.rabbit;
+	} else {
+		config.rabbit = require( 'wascally' );
+		if ( _.has( options, 'rabbit' ) ) {
+			config.rabbit = options.rabbit;
+		}
+
+		if ( _.has( options, 'logger' ) ) {
+			config.logger = options.logger;
+		}
 	}
+
 }
 
 module.exports = function ( options ) {

@@ -8,12 +8,13 @@ var enforcement = require( '@sinet/coverage-enforcement' );
 var gulp        = require( 'gulp' );
 var istanbul    = require( 'gulp-istanbul' );
 var mocha       = require( 'gulp-mocha' );
+var mkdirp      = require( 'mkdirp' );
 
 gulp.task( 'clean-coverage', function () {
 	del( [ 'instrumented' ] );
 } );
 
-gulp.task( 'test', [ 'clean-coverage' ], function () {
+gulp.task( 'test', [ 'clean-coverage', 'create-log-dir' ], function () {
 	var covEnforcerOpts = { 'thresholds' : enforcement.thresholds };
 
 	var paths = {
@@ -33,7 +34,7 @@ gulp.task( 'test', [ 'clean-coverage' ], function () {
 			'!test/**'
 		],
 
-		'test'     : [ 'test/it/**/*.js', 'test/unit/**/*.js' ],
+		'test'     : [ 'test/unit/**/*.js', 'test/it/**/*.js' ],
 		'coverage' : 'instrumented'
 	};
 
@@ -88,6 +89,18 @@ gulp.task( 'test', [ 'clean-coverage' ], function () {
 					process.exit();
 				} );
 		} );
+} );
+
+gulp.task( 'create-log-dir', function ( callback ) {
+
+	mkdirp( 'logs', function ( error ) {
+		if ( error ) {
+			console.log( error.stack );
+			process.exit( 1 );
+		}
+		callback();
+	} );
+
 } );
 
 gulp.task( 'inspect-queues', function () {

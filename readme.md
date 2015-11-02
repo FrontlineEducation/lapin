@@ -8,7 +8,7 @@ Currently this project is using [Rabbus](https://github.com/derickbailey/rabbus)
 
 The [JSend](http://labs.omniti.com/labs/jsend) specification is required to determine if an error has occurred in a response.
 
-## Installation an usage
+## Installation and Usage
 
 As lapin uses wascally you need to install it along with lapin:
 
@@ -22,6 +22,15 @@ Require lapin and wascally:
 ```javascript
 var rabbit = require( 'wascally' );
 var lapin  = require( 'lapin' )( rabbit );
+
+// or
+
+var options = {
+	'logger' : logger,
+	'rabbit' : wascally
+};
+
+var lapin = require( 'lapin' )( options )
 ```
 
 The following are simple usage examples:

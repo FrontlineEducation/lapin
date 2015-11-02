@@ -5,37 +5,46 @@
 
 var expect = require( 'chai' ).expect;
 var rabbit = require( 'wascally' );
-var Lapin  = require( process.cwd() );
-var lapin  = new Lapin( rabbit );
+var fs     = require( 'fs' );
 
-describe( 'Perform request respond multiple message types', function () {
+var requireNew = require( 'require-new' );
+var Lapin      = requireNew( process.cwd() );
+
+describe( 'Logger - Console Log', function () {
+
+	var lapin;
+	var logPath = 'logs/consoleLog.log';
 
 	before( function ( done ) {
-		require( './init' )( done );
+
+		lapin = new Lapin( {
+			'rabbit' : rabbit,
+			'logger' : console.log
+		} );
+		require( '../init' )( done );
+
 	} );
 
 	describe( '- Success -', function () {
 
 		var response;
-		var errorResponse;
 		var request;
 
 		before( function ( done ) {
 
 			lapin.respond( {
-				'messageType' : [ 'v1.sessions-test-mul.get', 'v1.consumers-test-mul.post' ]
+				'messageType' : [ 'v1.logger-console.get', 'v1.logger-console.post' ]
 			}, function ( requestData, send ) {
 				request = requestData;
-				send.success( 'users' );
+				send.success( { 'credentials' : 'testfoo123' } );
 			} )
 
 				.on( 'error', done )
 				.on( 'ready', function ( responder ) {
-					var messageType = 'v1.consumers-test-mul.post';
+					var messageType = 'v1.logger-console.post';
 					if ( responder.messageType.slice( 8 ) === messageType ) {
 						lapin.request( messageType, { 'user' : 'Testfoo' }, function ( error, data ) {
 							response      = data;
-							errorResponse = error;
 							setTimeout( done, 1000 );
 						} );
 					}
@@ -53,13 +62,15 @@ describe( 'Perform request respond multiple message types', function () {
 
 			expect( response ).be.an( 'object' );
 			expect( response.status ).to.exist.and.to.equal( 'success' );
-			expect( response.data ).to.exist.and.to.equal( 'users' );
+			expect( response.data.credentials ).to.exist.and.to.equal( 'testfoo123' );
 
 		} );
 
-		it( '-- should have a null error response', function () {
-			expect( errorResponse ).to.be.an( 'null' );
-
+		it( '-- should not have a log file', function ( done ) {
+			fs.exists( logPath, function ( exists ) {
+				expect( exists ).to.be.equal( false );
+				done();
+			} );
 		} );
 
 	} );

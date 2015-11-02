@@ -1,7 +1,56 @@
 {
   "name": "lapin",
-  "version": "4.5.0",
+  "version": "4.6.0",
   "dependencies": {
+    "@sinet/logger": {
+      "version": "1.0.1",
+      "from": "@sinet/logger@>=1.0.1 <2.0.0",
+      "resolved": "https://registry.npmjs.org/@sinet/logger/-/logger-1.0.1.tgz",
+      "dependencies": {
+	"winston": {
+	  "version": "1.1.2",
+	  "from": "winston@>=1.0.1 <2.0.0",
+	  "resolved": "https://registry.npmjs.org/winston/-/winston-1.1.2.tgz",
+	  "dependencies": {
+	    "async": {
+	      "version": "1.0.0",
+	      "from": "async@>=1.0.0 <1.1.0",
+	      "resolved": "https://registry.npmjs.org/async/-/async-1.0.0.tgz"
+	    },
+	    "colors": {
+	      "version": "1.0.3",
+	      "from": "colors@>=1.0.0 <1.1.0",
+	      "resolved": "https://registry.npmjs.org/colors/-/colors-1.0.3.tgz"
+	    },
+	    "cycle": {
+	      "version": "1.0.3",
+	      "from": "cycle@>=1.0.0 <1.1.0",
+	      "resolved": "https://registry.npmjs.org/cycle/-/cycle-1.0.3.tgz"
+	    },
+	    "eyes": {
+	      "version": "0.1.8",
+	      "from": "eyes@>=0.1.0 <0.2.0",
+	      "resolved": "https://registry.npmjs.org/eyes/-/eyes-0.1.8.tgz"
+	    },
+	    "isstream": {
+	      "version": "0.1.2",
+	      "from": "isstream@>=0.1.0 <0.2.0",
+	      "resolved": "https://registry.npmjs.org/isstream/-/isstream-0.1.2.tgz"
+	    },
+	    "pkginfo": {
+	      "version": "0.3.1",
+	      "from": "pkginfo@>=0.3.0 <0.4.0",
+	      "resolved": "https://registry.npmjs.org/pkginfo/-/pkginfo-0.3.1.tgz"
+	    },
+	    "stack-trace": {
+	      "version": "0.0.9",
+	      "from": "stack-trace@>=0.0.0 <0.1.0",
+	      "resolved": "https://registry.npmjs.org/stack-trace/-/stack-trace-0.0.9.tgz"
+	    }
+	  }
+	}
+      }
+    },
     "bluebird": {
       "version": "2.10.0",
       "from": "bluebird@>=2.9.27 <3.0.0",
