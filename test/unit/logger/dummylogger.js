@@ -4,7 +4,7 @@
 /* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var expect        = require( 'chai' ).expect;
+var expect      = require( 'chai' ).expect;
 var dummylogger = require( process.cwd() + '/lib/logger/dummylogger' );
 
 describe( 'dummy logger', function () {

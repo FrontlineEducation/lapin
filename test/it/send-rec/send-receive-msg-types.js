@@ -3,17 +3,21 @@
 /* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var expect = require( 'chai' ).expect;
-var rabbit = require( 'wascally' );
-var Lapin  = require( process.cwd() );
+var requireNew = require( 'require-new' );
+var expect     = require( 'chai' ).expect;
 
 describe( 'Perform Send Receive multiple messageTypes', function () {
 
 	var lapin;
+	var rabbit = requireNew( 'wascally' );
+	var Lapin  = requireNew( process.cwd() );
 
 	before( function ( done ) {
 		lapin = new Lapin( rabbit );
-		require( '../init' )( done );
+		require( '../init' )( {
+			'done'   : done,
+			'rabbit' : rabbit
+		} );
 	} );
 
 	describe( 'WITH payload', function () {

@@ -3,9 +3,8 @@
 /* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var expect = require( 'chai' ).expect;
-var rabbit = require( 'wascally' );
-var Lapin  = require( process.cwd() );
+var requireNew = require( 'require-new' );
+var expect     = require( 'chai' ).expect;
 
 describe( 'Perform Send( PROMISE ) Receive', function () {
 
@@ -15,9 +14,15 @@ describe( 'Perform Send( PROMISE ) Receive', function () {
 	var errorData    = null;
 	var payload      = { 'user' : 'Testfoo' };
 
+	var rabbit = requireNew( 'wascally' );
+	var Lapin  = requireNew( process.cwd() );
+
 	before( function ( done ) {
 		lapin = new Lapin( rabbit );
-		require( '../init' )( done );
+		require( '../init' )( {
+			'done'   : done,
+			'rabbit' : rabbit
+		} );
 	} );
 
 	before( function ( done ) {

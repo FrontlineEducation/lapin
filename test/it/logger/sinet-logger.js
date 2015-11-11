@@ -3,54 +3,56 @@
 /* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var expect = require( 'chai' ).expect;
-var rabbit = require( 'wascally' );
-var os     = require( 'os' );
-var fs     = require( 'fs' );
-var logger = require( '@sinet/logger' );
-
+var expect     = require( 'chai' ).expect;
+var os         = require( 'os' );
 var requireNew = require( 'require-new' );
-var Lapin      = requireNew( process.cwd() );
+var fs         = require( 'fs' );
+var logger     = require( '@sinet/logger' );
 
 describe( 'Logger - Sinet', function () {
 
 	var lapin;
 	var logPath = 'logs/sinetLogger.log';
-
-	before( function ( done ) {
-		// Options are for winston transports, file and console
-		var options = {
-			'file' : {
-				'level'    : 'silly',
-				'filename' : logPath
-			},
-
-			'console' : {
-				'level' : 'silly'
-			},
-
-			// These are additional fields that get added to all logs
-			'additional' : {
-				'container' : 'lapin',
-
-				// The items below are defaults added by the library automatically
-				'hostname'   : os.hostname(),
-				'dockerhost' : process.env.DOCKER_HOST || 'undefined'
-			}
-		};
-
-		lapin = new Lapin( {
-			'rabbit' : rabbit,
-			'logger' : logger( options )
-		} );
-		require( '../init' )( done );
-
-	} );
+	var rabbit  = requireNew( 'wascally' );
+	var Lapin   = requireNew( process.cwd() );
 
 	describe( '- Success -', function () {
 
 		var response;
 		var request;
+
+		before( function ( done ) {
+			// Options are for winston transports, file and console
+			var options = {
+				'file' : {
+					'level'    : 'silly',
+					'filename' : logPath
+				},
+
+				'console' : {
+					'level' : 'silly'
+				},
+
+				// These are additional fields that get added to all logs
+				'additional' : {
+					'container' : 'lapin',
+
+					// The items below are defaults added by the library automatically
+					'hostname'   : os.hostname(),
+					'dockerhost' : process.env.DOCKER_HOST || 'undefined'
+				}
+			};
+
+			require( '../init' )( {
+				'done'   : done,
+				'rabbit' : rabbit
+			} );
+
+			lapin = new Lapin( {
+				'rabbit' : rabbit,
+				'logger' : logger( options )
+			} );
+		} );
 
 		before( function ( done ) {
 

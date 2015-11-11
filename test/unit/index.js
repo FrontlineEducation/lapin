@@ -2,15 +2,15 @@
 
 var requireNew = require( 'require-new' );
 var expect     = require( 'chai' ).expect;
-var wascally   = require( 'wascally' );
 var config     = require( process.cwd() + '/lib/config' );
 
 describe( 'lapin with wascally', function () {
 
 	var lapin;
+	var wascally = requireNew( 'wascally' );
 
 	before( function () {
-		lapin = require( process.cwd() + '/index' )( wascally );
+		lapin = require( process.cwd() )( wascally );
 	} );
 
 	it( '-- should have proper attributes', function () {
@@ -39,7 +39,7 @@ describe( 'lapin with wascally', function () {
 
 	it( '-- should return a singleton lapin object', function () {
 
-		var anotherLapin = require( process.cwd() + '/index' )( wascally );
+		var anotherLapin = require( process.cwd() )( wascally );
 		expect( anotherLapin ).to.equal( lapin );
 
 	} );
@@ -48,23 +48,24 @@ describe( 'lapin with wascally', function () {
 
 describe( 'lapin with no options', function () {
 
-	before( function () {
-		requireNew( process.cwd() + '/index' )();
-	} );
-
-	it( '-- should use local wascally for rabbit', function () {
-		expect( config.rabbit ).equal( wascally );
+	it( '-- should throw an error', function () {
+		try {
+			requireNew( process.cwd() + '/index' )();
+		} catch ( error ) {
+			expect( error ).to.be.instanceof( Error );
+		}
 	} );
 
 } );
 
-describe( 'lapin as options as object with wascally without logger', function () {
+describe( 'lapin as object with wascally without logger', function () {
 
+	var wascally = requireNew( 'wascally' );
 	before( function () {
 		requireNew( process.cwd() + '/index' )( { 'rabbit' : wascally } );
 	} );
 
-	it( '-- should use local wascally for rabbit', function () {
+	it( '-- should use the same rabbit', function () {
 		expect( config.rabbit ).equal( wascally );
 	} );
 
@@ -72,12 +73,61 @@ describe( 'lapin as options as object with wascally without logger', function ()
 
 describe( 'lapin with logger as options without wascally', function () {
 
-	before( function () {
-		requireNew( process.cwd() + '/index' )( { 'logger' : console.log } );
+	it( '-- should throw error', function () {
+		try {
+			requireNew( process.cwd() + '/index' )( { 'logger' : console.log } );
+		} catch ( error ) {
+			expect( error ).to.be.instanceof( Error );
+		}
 	} );
 
-	it( '-- should use local wascally for rabbit', function () {
-		expect( config.logger ).equal( console.log );
+} );
+
+describe( 'lapin with logger and wascally', function () {
+
+	var rabbit = requireNew( 'wascally' );
+	before( function () {
+		requireNew( process.cwd() + '/index' )( {
+			'logger' : console.log,
+			'rabbit' : rabbit
+		} );
+	} );
+
+	it( '-- should throw error', function () {
+		expect( config.logger ).to.equal( console.log );
+		expect( config.rabbit ).to.equal( rabbit );
+	} );
+
+} );
+
+describe( 'lapin with other options only logger', function () {
+
+	it( '-- should throw error', function () {
+		try {
+			requireNew( process.cwd() + '/index' )( {
+				'logger' : console.log,
+				'opts'   : 'opts'
+			} );
+		} catch ( error ) {
+			expect( error ).to.be.instanceof( Error );
+		}
+	} );
+
+} );
+
+describe( 'lapin with rabbit with other options', function () {
+
+	var rabbit = requireNew( 'wascally' );
+	before( function () {
+		requireNew( process.cwd() + '/index' )( {
+			'log'    : console.log,
+			'rabbit' : rabbit,
+			'opts'   : 'opts'
+		} );
+	} );
+
+	it( '-- should have the same rabbit', function () {
+		expect( config.rabbit ).to.equal( rabbit );
 	} );
 
 } );

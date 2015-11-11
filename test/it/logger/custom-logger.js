@@ -3,38 +3,40 @@
 /* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var expect = require( 'chai' ).expect;
-var rabbit = require( 'wascally' );
-var fs     = require( 'fs' );
-
+var expect     = require( 'chai' ).expect;
+var fs         = require( 'fs' );
 var requireNew = require( 'require-new' );
-var Lapin      = requireNew( process.cwd() );
 
 describe( 'Logger - Custom Log', function () {
 
 	var lapin;
 	var logPath = 'logs/customLog.log';
-
-	before( function ( done ) {
-
-		var logger = {
-			'silly' : function ( data ) {
-				console.log( data );
-			}
-		};
-
-		lapin = new Lapin( {
-			'rabbit' : rabbit,
-			'logger' : logger
-		} );
-		require( '../init' )( done );
-
-	} );
+	var rabbit  = requireNew( 'wascally' );
+	var Lapin   = requireNew( process.cwd() );
 
 	describe( '- Success -', function () {
 
 		var response;
 		var request;
+
+		before( function ( done ) {
+
+			var logger = {
+				'silly' : function ( data ) {
+					console.log( data );
+				}
+			};
+
+			require( '../init' )( {
+				'done'   : done,
+				'rabbit' : rabbit
+			} );
+
+			lapin = new Lapin( {
+				'rabbit' : rabbit,
+				'logger' : logger
+			} );
+		} );
 
 		before( function ( done ) {
 

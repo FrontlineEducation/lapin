@@ -3,24 +3,28 @@
 /* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var expect = require( 'chai' ).expect;
-var rabbit = require( 'wascally' );
-var Lapin  = require( process.cwd() );
+var requireNew = require( 'require-new' );
+var expect     = require( 'chai' ).expect;
 
 describe( 'Perform request( PROMISE )  respond', function () {
 
 	var lapin;
-
-	before( function ( done ) {
-		lapin = new Lapin( rabbit );
-		require( '../init' )( done );
-	} );
+	var rabbit = requireNew( 'wascally' );
+	var Lapin  = requireNew( process.cwd() );
 
 	describe( '- Success -', function () {
 
 		var response;
 		var errorResponse = null;
 		var request;
+
+		before( function ( done ) {
+			lapin = new Lapin( rabbit );
+			require( '../init' )( {
+				'done'   : done,
+				'rabbit' : rabbit
+			} );
+		} );
 
 		before( function ( done ) {
 

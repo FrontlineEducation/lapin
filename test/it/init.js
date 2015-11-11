@@ -3,16 +3,22 @@
 /* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
+var _                 = require( 'lodash' );
 var rabbit            = require( 'wascally' );
 var config            = require( process.cwd() + '/test/config' );
 var client            = require( 'net' );
 var timeoutConnection = 3000; // in ms
-var doneConfig        = false;
 
-function configure ( done ) {
+function configure ( options ) {
 
-	if ( doneConfig ) {
-		return done();
+	var done = options;
+
+	if ( _.has( options, 'done'  ) ) {
+		done = options.done;
+	}
+
+	if ( _.has( options, 'rabbit' ) ) {
+		rabbit = options.rabbit;
 	}
 
 	rabbit.configure( {
@@ -20,7 +26,6 @@ function configure ( done ) {
 	} )
 	.then( function () {
 
-		doneConfig = true;
 		var socket = client.createConnection( config.connection.port, config.connection.server );
 		/*
 		in cases host is not reachable and cannot ping
