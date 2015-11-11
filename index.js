@@ -38,25 +38,36 @@ function Lapin () {
 
 }
 
+// pick only the needed options
+function hasMultipleOptions ( options ) {
+
+	if ( _.has( options, 'rabbit' ) ) {
+		return true;
+	}
+
+	if ( _.has( options, 'logger' ) ) {
+		return true;
+	}
+
+	return false;
+}
+
 function setConfigs ( options ) {
 	/*
 	 * setting config for lapin to be used across the lib
 	 * options might not only be rabbit
 	 */
-	config.rabbit = options;
-	if ( !options ) {
-		config.rabbit = require( 'wascally' );
-	} else {
-		config.rabbit = require( 'wascally' );
-		if ( _.has( options, 'rabbit' ) ) {
-			config.rabbit = options.rabbit;
-		}
 
-		if ( _.has( options, 'logger' ) ) {
-			config.logger = options.logger;
-		}
+	config.rabbit = options;
+	if ( hasMultipleOptions( options ) ) {
+		config.rabbit = options.rabbit;
+		config.logger = options.logger;
 	}
 
+	if ( !options || !config.rabbit  ) {
+		// should throw error and not proceed to object creation
+		throw new Error( 'Rabbit required' );
+	}
 }
 
 module.exports = function ( options ) {
