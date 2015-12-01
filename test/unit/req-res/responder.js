@@ -32,7 +32,6 @@ describe( 'Responder', function () {
 			var LapinError = new Responder( { 'messageType' : 'v1.consu' } );
 			LapinError
 				.on( 'error', function ( error ) {
-					console.log( error );
 					expect( error ).to.be.instanceof( Error );
 					done();
 				} );

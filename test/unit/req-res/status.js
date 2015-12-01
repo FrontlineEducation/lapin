@@ -5,7 +5,6 @@
 
 var expect  = require( 'chai' ).expect;
 var Emitter = require( 'events' ).EventEmitter;
-
 describe( 'Status', function () {
 
 	var status;
@@ -17,8 +16,9 @@ describe( 'Status', function () {
 		};
 
 		status = require( process.cwd() + '/lib/req-res/status' )( {
-			'respond' : respond,
-			'log'     : require( process.cwd() + '/lib/logger' )( {
+			'respond'        : respond,
+			'timeoutHandler' : require( process.cwd() + '/lib/config' ).timeout,
+			'log'            : require( process.cwd() + '/lib/logger' )( {
 				'emitter' : new Emitter()
 			} )
 		} );

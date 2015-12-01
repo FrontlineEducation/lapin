@@ -13,7 +13,12 @@ describe( 'Perform request respond with timeout', function () {
 	var Lapin  = requireNew( process.cwd() );
 
 	before( function ( done ) {
-		lapin = new Lapin( rabbit );
+		lapin = new Lapin( {
+			'rabbit'  : rabbit,
+			'timeout' : {
+				'ms' : 1000
+			}
+		} );
 		require( '../init' )( {
 			'done'   : done,
 			'rabbit' : rabbit
@@ -22,7 +27,7 @@ describe( 'Perform request respond with timeout', function () {
 
 	describe( '- Timeout -', function () {
 
-		this.timeout( 42000 );
+		this.timeout( 45000 );
 
 		var errorResponse;
 
@@ -47,7 +52,7 @@ describe( 'Perform request respond with timeout', function () {
 
 		it( '-- should receive timeout', function () {
 
-			expect( errorResponse.status ).to.exist.and.to.equal( 'fail' );
+			expect( errorResponse.status ).to.exist.and.to.equal( 'error' );
 			expect( errorResponse.data ).to.exist.and.to.equal( 'Request timeout' );
 
 		} );

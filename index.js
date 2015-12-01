@@ -49,6 +49,10 @@ function hasMultipleOptions ( options ) {
 		return true;
 	}
 
+	if ( _.has( options, 'timeout' ) ) {
+		return true;
+	}
+
 	return false;
 }
 
@@ -58,7 +62,8 @@ function setConfigs ( options ) {
 	 * options might not only be rabbit
 	 */
 
-	config.rabbit = options;
+	config.rabbit  = options;
+	config.timeout.setOptions( options.timeout );
 	if ( hasMultipleOptions( options ) ) {
 		config.rabbit = options.rabbit;
 		config.logger = options.logger;

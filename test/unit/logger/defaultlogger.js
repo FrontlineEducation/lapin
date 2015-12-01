@@ -5,10 +5,11 @@
 
 var EventEmitter  = require( 'events' ).EventEmitter;
 var expect        = require( 'chai' ).expect;
-var defaultlogger = require( process.cwd() + '/lib/logger/defaultlogger' );
+var requireNew = require( 'require-new' );
 
 describe( 'default logger', function () {
 
+	var defaultlogger = requireNew( process.cwd() + '/lib/logger/defaultlogger' );
 	var emitter       = new EventEmitter();
 	var defaultLogger = defaultlogger( {
 		'emitter' : emitter
