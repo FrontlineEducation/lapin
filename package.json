@@ -1,6 +1,6 @@
 {
   "name": "lapin",
-  "version": "4.7.4",
+  "version": "4.7.5",
   "description": "RPC library for AMQP protocol",
   "main": "index.js",
   "scripts": {
