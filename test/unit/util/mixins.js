@@ -8,8 +8,12 @@ var mixins = require( process.cwd() + '/lib/util/mixins' );
 
 describe( 'mixins', function () {
 
-	it( 'should have `extract` method', function ( ) {
+	it( 'should have the required methods', function ( ) {
 		expect( mixins.extract ).to.exist;
+		expect( mixins.cloneDeep ).to.exist;
+		expect( mixins.transformToObj ).to.exist;
+		expect( mixins.getProducerOptions ).to.exist;
+		expect( mixins.getConsumerOptions ).to.exist;
 	} );
 
 	describe( '`extract` method', function () {
@@ -33,4 +37,16 @@ describe( 'mixins', function () {
 
 	} );
 
+	it( 'should return null obj when params=null in cloneDeep', function () {
+		var obj = mixins.cloneDeep( null );
+
+		expect( obj ).to.not.exists;
+	} );
+
+	it( 'should return cloned obj when in cloneDeep', function () {
+		var paramObj = { 'name' : 'TestFoo' };
+		var obj      = mixins.cloneDeep( paramObj );
+
+		expect( paramObj ).to.not.equal( obj );
+	} );
 } );
