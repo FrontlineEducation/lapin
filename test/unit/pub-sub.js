@@ -70,14 +70,6 @@ describe( 'publish and subscribe', function () {
 			} );
 		} );
 
-		it( 'should return an error when invalid messagetType', function ( done ) {
-			pubSub.subscribe( [ 'v1.session.get' ], function () {} )
-				.on( 'error', function () {
-					expect( true ).to.be.true;
-					done();
-				} );
-		} );
-
 	} );
 } );
 

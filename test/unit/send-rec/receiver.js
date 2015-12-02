@@ -28,15 +28,6 @@ describe( 'Receiver', function () {
 			expect( consumerStub.calledOnce ).to.equal( true );
 		} );
 
-		it( 'should emit error when option is invalid', function ( done ) {
-			var LapinError = new Receiver( { 'messageType' : 'v1.consu' } );
-			LapinError
-				.on( 'error', function ( error ) {
-					console.log( error );
-					expect( error ).to.be.instanceof( Error );
-					done();
-				} );
-		} );
 	} );
 
 } );

@@ -70,13 +70,6 @@ describe( 'send and receive', function () {
 			} );
 		} );
 
-		it( 'should return an error when invalid messagetType', function ( done ) {
-			sendRec.receive( [ 'v1.session.get' ], function () {} )
-				.on( 'error', function () {
-					expect( true ).to.be.true;
-					done();
-				} );
-		} );
 	} );
 } );
 

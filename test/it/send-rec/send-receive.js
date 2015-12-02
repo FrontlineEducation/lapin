@@ -128,4 +128,74 @@ describe( 'Perform Send Receive', function () {
 
 	} );
 
+	describe( '- Error Invalid Options-', function () {
+
+		it( '-- should return error for NULL messageType ( Sender )', function ( done ) {
+			lapin.receive( 'v1.pubsub.null-options', function () {
+			} )
+				.on( 'error', done )
+				.on( 'ready', function () {
+					lapin.send( null, { 'user' : 'Foo' }, function ( error, data ) {
+						expect( error ).be.an( 'object' );
+						expect( error.status ).to.equal( 'error' );
+						expect( error.data ).to.exists;
+						expect( data ).to.be.an( 'null' );
+						done();
+					} );
+				} );
+		} );
+
+		it( '-- should return error for incorrect messageType ( Sender )', function ( done ) {
+			lapin.receive( 'v1.pubsub.invalid-options', function () {
+			} )
+				.on( 'error', done )
+				.on( 'ready', function () {
+					lapin.send( 'v1.invalid-options', { 'user' : 'Foo' }, function ( error, data ) {
+						expect( error ).be.an( 'object' );
+						expect( error.data ).to.exists;
+						expect( error.status ).to.equal( 'error' );
+						expect( data ).to.be.an( 'null' );
+						done();
+					} );
+				} );
+		} );
+
+		it( '-- should return error for NULL messageType ( Receiver )', function ( done ) {
+			try {
+				lapin.receive( null, function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+
+		it( '-- should return error for incorrect messageType ( Receiver )', function ( done ) {
+			try {
+				lapin.receive( 'v1.', function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+
+		it( '-- should throw error for not supported messageType ( Receiver )', function ( done ) {
+			try {
+				lapin.receive( [ 'v1.test.throw', 'v1.test.error' ], function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+
+		it( '-- should throw error for NULL messageType ( Receiver )', function ( done ) {
+			try {
+				lapin.receive( {
+					'validate' : {}
+				}, function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+	} );
 } );

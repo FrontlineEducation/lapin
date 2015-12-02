@@ -36,15 +36,6 @@ describe( 'Sender', function () {
 			expect( producerSpy.calledOnce ).to.equal( true );
 		} );
 
-		it( 'should emit error when option is invalid', function ( done ) {
-			var LapinError = new Sender( { 'messageType' : 'v1.consu' } );
-			LapinError
-				.on( 'error', function ( error ) {
-					console.log( error );
-					expect( error ).to.be.instanceof( Error );
-					done();
-				} );
-		} );
 	} );
 
 } );

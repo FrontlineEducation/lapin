@@ -99,4 +99,84 @@ describe( 'Perform publish subscribe', function () {
 		} );
 
 	} );
+
+	describe( '- Error Invalid Options-', function () {
+
+		it( '-- should return error for NULL messageType ( Publisher )', function ( done ) {
+			lapin.subscribe( 'v1.pubsub.null-options', function () {
+			} )
+				.on( 'error', done )
+				.on( 'ready', function () {
+					lapin.publish( null, { 'user' : 'Foo' }, function ( error, data ) {
+						expect( error ).be.an( 'object' );
+						expect( error.status ).to.equal( 'error' );
+						expect( error.data ).to.exists;
+						expect( data ).to.be.an( 'null' );
+						done();
+					} );
+				} );
+		} );
+
+		it( '-- should return error for incorrect messageType ( Publisher )', function ( done ) {
+			lapin.subscribe( 'v1.pubsub.invalid-options', function () {
+			} )
+				.on( 'error', done )
+				.on( 'ready', function () {
+					lapin.publish( 'v1.invalid-options', { 'user' : 'Foo' }, function ( error, data ) {
+						expect( error ).be.an( 'object' );
+						expect( error.data ).to.exists;
+						expect( error.status ).to.equal( 'error' );
+						expect( data ).to.be.an( 'null' );
+						done();
+					} );
+				} );
+		} );
+
+		it( '-- should throw error for NULL messageType ( Subscriber )', function ( done ) {
+			try {
+				lapin.subscribe( null, function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+
+		it( '-- should throw error for incorrect messageType ( Subscriber )', function ( done ) {
+			try {
+				lapin.subscribe( 'v1.', function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+
+		it( '-- should throw error for not supported messageType ( Subscriber )', function ( done ) {
+			try {
+				lapin.subscribe( [ 'v1.test.throw', 'v1.test.error' ], function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+
+		it( '-- should throw error for not supported messageType ( Subscriber )', function ( done ) {
+			try {
+				lapin.subscribe( [ 'v1.test.throw', 'v1.test.error' ], function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+
+		it( '-- should throw error for NULL messageType ( Subscriber )', function ( done ) {
+			try {
+				lapin.subscribe( {
+					'validate' : {}
+				}, function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+	} );
 } );

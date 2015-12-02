@@ -72,14 +72,6 @@ describe( 'request and respond', function () {
 			} );
 		} );
 
-		it( 'should return an error when invalid messagetType', function ( done ) {
-			reqRes.respond( [ 'v1.session.get' ], function () {} )
-				.on( 'error', function () {
-					expect( true ).to.be.true;
-					done();
-				} );
-		} );
-
 	} );
 } );
 

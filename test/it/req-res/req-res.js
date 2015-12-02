@@ -296,6 +296,77 @@ describe( 'Perform request respond', function () {
 
 	} );
 
+	describe( '- Error Invalid Options-', function () {
+
+		it( '-- should return error for NULL messageType ( Requester )', function ( done ) {
+			lapin.respond( 'v1.reqrestest.null-options', function () {
+			} )
+				.on( 'error', done )
+				.on( 'ready', function () {
+					lapin.request( null, { 'user' : 'Foo' }, function ( error, data ) {
+						expect( error ).be.an( 'object' );
+						expect( error.status ).to.equal( 'error' );
+						expect( error.data ).to.exists;
+						expect( data ).to.be.an( 'null' );
+						done();
+					} );
+				} );
+		} );
+
+		it( '-- should return error for incorrect messageType ( Requester )', function ( done ) {
+			lapin.respond( 'v1.reqrestest.invalid-options', function () {
+			} )
+				.on( 'error', done )
+				.on( 'ready', function () {
+					lapin.request( 'v1.invalid-options', null, function ( error, data ) {
+						expect( error ).be.an( 'object' );
+						expect( error.data ).to.exists;
+						expect( error.status ).to.equal( 'error' );
+						expect( data ).to.be.an( 'null' );
+						done();
+					} );
+				} );
+		} );
+
+		it( '-- should return error for NULL messageType ( Responder )', function ( done ) {
+			try {
+				lapin.respond( null, function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+
+		it( '-- should return error for incorrect messageType ( Responder )', function ( done ) {
+			try {
+				lapin.respond( 'v1.', function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+
+		it( '-- should throw error for not supported messageType ( Responder )', function ( done ) {
+			try {
+				lapin.respond( [ 'v1.test.throw', 'v1.test.error' ], function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+
+		it( '-- should throw error for NULL messageType ( Responder )', function ( done ) {
+			try {
+				lapin.respond( {
+					'validate' : {}
+				}, function () {} );
+			} catch ( error ) {
+				expect( error ).to.be.instanceOf.Error;
+				done();
+			}
+		} );
+	} );
+
 	describe( '- Fail -', function () {
 
 		var response;
