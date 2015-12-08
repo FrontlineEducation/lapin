@@ -21,7 +21,6 @@
   },
   "homepage": "https://github.com/School-Improvement-Network/lapin",
   "dependencies": {
-    "@sinet/logger": "^1.0.1",
     "bluebird": "^2.9.27",
     "joi": "^6.6.1",
     "lodash": "^3.10.1",
@@ -29,6 +28,7 @@
   },
   "devDependencies": {
     "@sinet/coverage-enforcement": "^1.2.0",
+    "@sinet/logger": "^1.0.1",
     "chai": "^3.2.0",
     "cli-table": "^0.3.1",
     "colors": "^1.1.2",
