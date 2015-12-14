@@ -8,6 +8,9 @@ var Emitter = require( 'events' ).EventEmitter;
 describe( 'Status', function () {
 
 	var status;
+	var statusError;
+	var statusError2;
+	var statusFail;
 	var response;
 
 	before( function () {
@@ -22,6 +25,31 @@ describe( 'Status', function () {
 				'emitter' : new Emitter()
 			} )
 		} );
+
+		statusError = require( process.cwd() + '/lib/req-res/status' )( {
+			'respond'        : respond,
+			'timeoutHandler' : require( process.cwd() + '/lib/config' ).timeout,
+			'log'            : require( process.cwd() + '/lib/logger' )( {
+				'emitter' : new Emitter()
+			} )
+		} );
+
+		statusError2 = require( process.cwd() + '/lib/req-res/status' )( {
+			'respond'        : respond,
+			'timeoutHandler' : require( process.cwd() + '/lib/config' ).timeout,
+			'log'            : require( process.cwd() + '/lib/logger' )( {
+				'emitter' : new Emitter()
+			} )
+		} );
+
+		statusFail = require( process.cwd() + '/lib/req-res/status' )( {
+			'respond'        : respond,
+			'timeoutHandler' : require( process.cwd() + '/lib/config' ).timeout,
+			'log'            : require( process.cwd() + '/lib/logger' )( {
+				'emitter' : new Emitter()
+			} )
+		} );
+
 	} );
 
 	it( 'should return success data', function () {
@@ -38,7 +66,7 @@ describe( 'Status', function () {
 	it( 'should return error data w/ message, errorData and code', function () {
 		var error = new Error( 'Internal Server Error' );
 
-		status.error( error.message, error, 404 );
+		statusError.error( error.message, error, 404 );
 
 		expect( response ).to.have.property( 'status' );
 		expect( response ).to.have.property( 'message' );
@@ -54,7 +82,7 @@ describe( 'Status', function () {
 	it( 'should return error data w/ message', function () {
 		var error = 'Internal Server Error';
 
-		status.error( 'Internal Server Error' );
+		statusError2.error( 'Internal Server Error' );
 
 		expect( response ).to.have.property( 'status' );
 		expect( response ).to.have.property( 'message' );
@@ -69,7 +97,7 @@ describe( 'Status', function () {
 
 	it( 'should return fail data', function () {
 		var data = 'Invalid data';
-		status.fail( data );
+		statusFail.fail( data );
 
 		expect( response ).to.have.property( 'status' );
 		expect( response ).to.have.property( 'data' );
