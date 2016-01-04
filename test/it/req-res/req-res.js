@@ -130,7 +130,7 @@ describe( 'Perform request respond', function () {
 		var validationData = {
 			'username'  : 'Testfoo',
 			'password'  : 'foo',
-			'birthyear' : '1990'
+			'birthyear' : 1990
 		};
 
 		before( function ( done ) {
