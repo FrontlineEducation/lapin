@@ -8,7 +8,8 @@
     "jshint": "jshint",
     "eslint": "eslint",
     "jscs": "jscs",
-    "nsp" : "nsp"
+    "nsp" : "nsp",
+    "lint": "npm run eslint -- --reset --eslintrc ./ && npm run jscs -- ./"
   },
   "repository": {
     "type": "git",
