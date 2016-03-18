@@ -8,7 +8,7 @@
     "jshint": "jshint",
     "eslint": "eslint",
     "jscs": "jscs",
-    "nsp" : "nsp",
+    "nsp": "nsp",
     "lint": "npm run eslint -- --reset --eslintrc ./ && npm run jscs -- ./"
   },
   "repository": {
@@ -23,7 +23,7 @@
   "homepage": "https://github.com/School-Improvement-Network/lapin",
   "dependencies": {
     "bluebird": "^2.9.27",
-    "joi": "^6.6.1",
+    "joi": "^8.0.5",
     "lodash": "^3.10.1",
     "rabbus": "^0.3.0"
   },
