@@ -5,7 +5,7 @@
 
 var expect  = require( 'chai' ).expect;
 var Emitter = require( 'events' ).EventEmitter;
-describe( 'Req-Res Status', function () {
+describe( 'Send-Rec Status', function () {
 
 	var status;
 	var statusError;
@@ -14,36 +14,36 @@ describe( 'Req-Res Status', function () {
 	var response;
 
 	before( function () {
-		var respond = function ( data ) {
+		var consume = function ( data ) {
 			response = data;
 		};
 
-		status = require( process.cwd() + '/lib/req-res/status' )( {
-			'respond'        : respond,
+		status = require( process.cwd() + '/lib/send-rec/status' )( {
+			'consume'        : consume,
 			'timeoutHandler' : require( process.cwd() + '/lib/config' ).timeout,
 			'log'            : require( process.cwd() + '/lib/logger' )( {
 				'emitter' : new Emitter()
 			} )
 		} );
 
-		statusError = require( process.cwd() + '/lib/req-res/status' )( {
-			'respond'        : respond,
+		statusError = require( process.cwd() + '/lib/send-rec/status' )( {
+			'consume'        : consume,
 			'timeoutHandler' : require( process.cwd() + '/lib/config' ).timeout,
 			'log'            : require( process.cwd() + '/lib/logger' )( {
 				'emitter' : new Emitter()
 			} )
 		} );
 
-		statusError2 = require( process.cwd() + '/lib/req-res/status' )( {
-			'respond'        : respond,
+		statusError2 = require( process.cwd() + '/lib/send-rec/status' )( {
+			'consume'        : consume,
 			'timeoutHandler' : require( process.cwd() + '/lib/config' ).timeout,
 			'log'            : require( process.cwd() + '/lib/logger' )( {
 				'emitter' : new Emitter()
 			} )
 		} );
 
-		statusFail = require( process.cwd() + '/lib/req-res/status' )( {
-			'respond'        : respond,
+		statusFail = require( process.cwd() + '/lib/send-rec/status' )( {
+			'consume'        : consume,
 			'timeoutHandler' : require( process.cwd() + '/lib/config' ).timeout,
 			'log'            : require( process.cwd() + '/lib/logger' )( {
 				'emitter' : new Emitter()

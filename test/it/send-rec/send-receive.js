@@ -28,9 +28,9 @@ describe( 'Perform Send Receive', function () {
 
 		before( function ( done ) {
 
-			lapin.receive( 'v1.sendreceivetest.get', function ( data, callback ) {
+			lapin.receive( 'v1.sendreceivetest.get', function ( data, send ) {
 				receivedData = data;
-				callback();
+				send.success( data );
 			} )
 				.on( 'error', done )
 				.on( 'ready', function () {
@@ -69,9 +69,9 @@ describe( 'Perform Send Receive', function () {
 				'messageType' : 'v1.sendrectest-opts.get',
 				'limit'       : 1,
 				'noBatch'     : true
-			}, function ( data, callback ) {
+			}, function ( data, send ) {
 				receivedData = data;
-				callback();
+				send.success( data );
 			} )
 				.on( 'error', done )
 				.on( 'ready', function () {

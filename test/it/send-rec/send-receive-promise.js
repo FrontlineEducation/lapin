@@ -27,9 +27,9 @@ describe( 'Perform Send( PROMISE ) Receive', function () {
 
 	before( function ( done ) {
 
-		lapin.receive( 'v1.sendrec-promise.get', function ( data, callback ) {
+		lapin.receive( 'v1.sendrec-promise.get', function ( data, send ) {
 			receivedData = data;
-			callback();
+			send.success( data );
 		} )
 		.on( 'error', done )
 		.on( 'ready', function () {

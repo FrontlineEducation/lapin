@@ -30,9 +30,9 @@ describe( 'Perform Send Receive multiple messageTypes', function () {
 
 			lapin.receive( {
 				'messageType' : [ 'v1.sendrectest.get', 'v1.sendrec.find' ]
-			}, function ( data, callback ) {
+			}, function ( data, send ) {
 				receivedData = data;
-				callback();
+				send.success( data );
 			} )
 				.on( 'error', done )
 				.on( 'ready', function ( sender ) {

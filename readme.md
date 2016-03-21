@@ -35,7 +35,7 @@ var lapin = require( 'lapin' )( options )
 
 The following are simple usage examples:
 
-**Send / Receive**
+## Send / Receive
 
 ***Sender Options***
 
@@ -86,22 +86,16 @@ options = {
     'exchange'    : logs
 }
 
-lapin.receive( options, function ( message, done ) {
+lapin.receive( options, function ( message, send ) {
 
 	someDatabaseQuery( message, function ( err, body ) {
-
-		if ( err ) {
-			throw err;
-		}
-
-		done();
-
+		// See # Return Status for send object usage
 	} );
 
 } );
 ```
 
-**Publish / Subscribe**
+## Publish / Subscribe
 
 ***Publisher Options***
 
@@ -152,7 +146,7 @@ lapin.subscribe( options, function ( message, done ) {
 } );
 ```
 
-**Request / Response**
+## Request / Response
 
 ***Request Options***
 
@@ -200,31 +194,10 @@ options = {
     'messageType' : 'v1.users.findAll',
     'limit'       : 1
 }
-lapin.respond( options, function ( message, respond ) {
-
-	if ( message.invalid ) {
-			return respond.fail( 'Invalid data' );
-	}
-
-	someDatabaseQuery().then( function ( result ) {
-
-		// JSend success with data
-		respond.success( result );
-
-	} ).catch( function handleError ( error ) {
-
-		// JSend error
-		respond.error( 'Failed query', error, 500 );
-		// or -- code is optional
-		respond.error( 'Failed query', error );
-		// or -- data is optional
-		respond.error( 'Failed query' );
-
-	} );
-
+lapin.respond( options, function ( message, send ) {
+	// See # Return Status for send object usage
 } );
 ```
-Please refer to [JSEND](http://labs.omniti.com/labs/jsend) for standard reply attributes
 
 ***Response with Validation using Joi***
 ```javascript
@@ -241,8 +214,8 @@ lapin.respond( {
 
     'validateOptions' : {} // <optional> see https://github.com/hapijs/joi for validation options
 
-} , function ( message, respond ) {
-    // consumer process
+} , function ( message, send ) {
+	// See # Return Status for send object usage
 } );
 
 ```
@@ -260,6 +233,71 @@ Make sure to use the same messageType, routingKey and exchange options.
 Whenever a `String` option is supplied instead of the `Object` option, lapin will automatically create the ff:
  - exchange and messageType ( Producer )
  - exchange, messageType and queue ( Consumer )
+
+## Return Status
+The following consumers returns an object status
+* Responder ( Req-Res )
+* Receiver ( Send-Rec )
+
+```
+lapin.[ respond | receive ] ( message, send ) {
+
+}
+```
+where `send` is an object of return status
+```
+send = {
+	'success' : {
+		returns {
+			'status' : success,
+			'data'   : data
+		},
+
+		'fail' : {
+			returns {
+				'status' : 'fail',
+				'data'   : errorData
+		},
+
+		'error' : {
+			return {
+				'status'  : 'error',
+				'message' : errorMsg,
+				'data'    : errorData,
+				'code'    : errorCode
+			}
+		}
+}
+```
+### Return Status Usage
+
+```
+lapin.[ respond | receive ]( options, function ( message, send ) {
+
+	if ( message.invalid ) {
+			return send.fail( 'Invalid data' );
+	}
+
+	someDatabaseQuery().then( function ( result ) {
+
+		// JSend success with data
+		send.success( result );
+
+	} ).catch( function handleError ( error ) {
+
+		// JSend error
+		send.error( 'Failed query', error, 500 );
+		// or -- code is optional
+		send.error( 'Failed query', error );
+		// or -- data is optional
+		send.error( 'Failed query' );
+
+	} );
+
+} );
+```
+
+Please refer to [JSEND](http://labs.omniti.com/labs/jsend) for standard reply attributes
 
 ## Contributing
 All pull requests must follow [coding conventions and standards](https://github.com/School-Improvement-Network/coding-conventions).
