@@ -1,3 +1,45 @@
+### 5.0.0
+- Change `Receiver` parameter from callback to send object
+
+Usage
+```
+// send is a object with success, fail and error attribs
+lapin.receive( function ( message, send ) {
+	// can use
+	send.success( data );
+	// or
+	send.fail( error );
+	// or
+	send.error( error );
+} );
+```
+### 4.7.10
+- Refactor responder calls
+
+### 4.7.9
+- Pass Joi validated message instead of the original
+
+### 4.7.8
+- Fix unacked when timeout occurs
+
+### 4.7.7
+- Handle multiple respond calls in one request
+
+### 4.7.6
+- Log error messages
+
+### 4.7.5
+- Fix for invalid options in lapin
+
+### 4.7.4
+- Add timeout handler. Request will timeout after 40s
+
+### 4.7.3
+- Fix logging inside rabbit
+
+### 4.7.1, 4.7.2
+- Fix options passed in lapin
+
 ### 4.7.0
 - Add logger support
 
