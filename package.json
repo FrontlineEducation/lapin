@@ -8,7 +8,7 @@
     "jshint": "jshint",
     "eslint": "eslint",
     "jscs": "jscs",
-    "nsp" : "nsp",
+    "nsp": "nsp",
     "lint": "npm run eslint -- --reset --eslintrc ./ && npm run jscs -- ./"
   },
   "repository": {
@@ -34,7 +34,7 @@
     "cli-table": "^0.3.1",
     "colors": "^1.1.2",
     "del": "^1.2.0",
-    "eslint": "^0.23.0",
+    "eslint": "^2.5.3",
     "gulp": "^3.9.0",
     "gulp-istanbul": "^0.10.0",
     "gulp-mocha": "^2.1.3",
