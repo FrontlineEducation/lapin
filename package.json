@@ -8,7 +8,7 @@
     "jshint": "jshint",
     "eslint": "eslint",
     "jscs": "jscs",
-    "nsp" : "nsp",
+    "nsp": "nsp",
     "lint": "npm run eslint -- --reset --eslintrc ./ && npm run jscs -- ./"
   },
   "repository": {
@@ -24,7 +24,7 @@
   "dependencies": {
     "bluebird": "^2.9.27",
     "joi": "^6.6.1",
-    "lodash": "^3.10.1",
+    "lodash": "^4.8.1",
     "rabbus": "^0.3.0"
   },
   "devDependencies": {
