@@ -1,6 +1,6 @@
 machine:
  node:
-  version: 0.12.0
+  version: 5.6.0
  hosts:
   rabbitmq: 127.0.0.1
  services:
@@ -12,9 +12,8 @@ dependencies:
 test:
  override:
   # Detect errors and potential problems
-  - npm run jshint -- ./
-  - npm run eslint -- --reset --eslintrc ./
-  - npm run jscs -- ./
+  - npm run eslint -- ./
+  - npm run jscs -- --esnext ./
 
   # Check packages with known and public vulnerable dependencies
   - npm run nsp -- check --warn-only

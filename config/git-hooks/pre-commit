@@ -8,9 +8,8 @@ attention=`tput setab 1`
 normal=`tput sgr0`
 
 runs=(
-	"jshint -- ./"
-	"eslint -- --reset --eslintrc ./"
-	"jscs -- ./"
+	"eslint -- ./"
+	"jscs -- --esnext ./"
 	"nsp -- check --warn-only"
 	"test"
 )

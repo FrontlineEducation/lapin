@@ -1,1 +1,6 @@
-./node_modules/sinet-coding-conventions/.eslintrc
+{
+	"extends": [
+		"./node_modules/@sinet/coding-conventions/.eslintrc",
+		"./node_modules/@sinet/coding-conventions/.eslintrc-es6"
+	]
+}
