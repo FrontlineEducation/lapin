@@ -1,6 +1,6 @@
 'use strict';
 
-var env = process.env;
+const env = process.env;
 
 module.exports = {
 	'connection' : {

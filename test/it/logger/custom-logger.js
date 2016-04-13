@@ -1,45 +1,40 @@
 'use strict';
 
-/* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var expect     = require( 'chai' ).expect;
-var fs         = require( 'fs' );
-var requireNew = require( 'require-new' );
+const expect     = require( 'chai' ).expect;
+const fs         = require( 'fs' );
+const requireNew = require( 'require-new' );
 
 describe( 'Logger - Custom Log', function () {
+	const logPath = 'logs/customLog.log';
+	const rabbit  = requireNew( 'wascally' );
+	const Lapin   = requireNew( process.cwd() );
 
-	var lapin;
-	var logPath = 'logs/customLog.log';
-	var rabbit  = requireNew( 'wascally' );
-	var Lapin   = requireNew( process.cwd() );
+	let lapin;
 
 	describe( '- Success -', function () {
-
-		var response;
-		var request;
+		let response, request;
 
 		before( function ( done ) {
-
-			var logger = {
-				'silly' : function ( data ) {
+			const logger = {
+				silly ( data ) {
 					console.log( data );
 				}
 			};
 
 			require( '../init' )( {
-				'done'   : done,
-				'rabbit' : rabbit
+				done,
+				rabbit
 			} );
 
 			lapin = new Lapin( {
-				'rabbit' : rabbit,
-				'logger' : logger
+				rabbit,
+				logger
 			} );
 		} );
 
 		before( function ( done ) {
-
 			lapin.respond( {
 				'messageType' : [ 'v1.logger-custom.get', 'v1.logger-custom.post' ]
 			}, function ( requestData, send ) {
@@ -49,7 +44,8 @@ describe( 'Logger - Custom Log', function () {
 
 				.on( 'error', done )
 				.on( 'ready', function ( responder ) {
-					var messageType = 'v1.logger-custom.post';
+					const messageType = 'v1.logger-custom.post';
+
 					if ( responder.messageType.slice( 8 ) === messageType ) {
 						lapin.request( messageType, { 'user' : 'Testfoo' }, function ( error, data ) {
 							response      = data;
@@ -60,18 +56,14 @@ describe( 'Logger - Custom Log', function () {
 		} );
 
 		it( '-- should receive correct requestData', function () {
-
 			expect( request ).be.an( 'object' );
 			expect( request.user ).to.exist.and.to.equal( 'Testfoo' );
-
 		} );
 
 		it( '-- should return SUCCESS data', function () {
-
 			expect( response ).be.an( 'object' );
 			expect( response.status ).to.exist.and.to.equal( 'success' );
 			expect( response.data.credentials ).to.exist.and.to.equal( 'testfoo123' );
-
 		} );
 
 		it( '-- should not have a log file', function ( done ) {
@@ -80,7 +72,5 @@ describe( 'Logger - Custom Log', function () {
 				done();
 			} );
 		} );
-
 	} );
-
 } );

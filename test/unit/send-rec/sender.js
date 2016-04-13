@@ -1,23 +1,19 @@
 'use strict';
 
-var expect = require( 'chai' ).expect;
-var sinon  = require( 'sinon' );
-var Sender = require( process.cwd() + '/lib/send-rec/sender' );
+const expect = require( 'chai' ).expect;
+const sinon  = require( 'sinon' );
+const Sender = require( process.cwd() + '/lib/send-rec/sender' );
 
 describe( 'Sender', function () {
+	let producerStub, producerSpy, Lapin;
 
-	var producerStub;
-	var producerSpy;
-	var Lapin;
-
-	var messageTest = { 'foo' : 'bar' };
+	const messageTest = { 'foo' : 'bar' };
 
 	before( function () {
 		Lapin = new Sender( { 'messageType' : 'v1.consumer.verify' } );
 	} );
 
 	describe( 'sender', function () {
-
 		before( function () {
 			producerSpy  = sinon.spy();
 			producerStub = sinon.stub( Lapin, 'send', producerSpy );
@@ -35,8 +31,6 @@ describe( 'Sender', function () {
 		it( 'should call producerSpy only once', function () {
 			expect( producerSpy.calledOnce ).to.equal( true );
 		} );
-
 	} );
-
 } );
 

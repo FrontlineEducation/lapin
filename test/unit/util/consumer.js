@@ -1,29 +1,27 @@
 'use strict';
 
-/* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 /* eslint no-underscore-dangle:0 */
 
-var sinon     = require( 'sinon' );
-var rewire    = require( 'rewire' );
-var expect    = require( 'chai' ).expect;
-var consumer  = rewire( process.cwd() + '/lib/util/consumer' );
-var Responder = require( '../../helper' ).Consumer;
+const sinon     = require( 'sinon' );
+const rewire    = require( 'rewire' );
+const expect    = require( 'chai' ).expect;
+const consumer  = rewire( process.cwd() + '/lib/util/consumer' );
+const Responder = require( '../../helper' ).Consumer;
 
 describe( 'Consumer util', function () {
+	let cache = {};
 
-	var options = {
+	const options = {
 		'messageType' : 'v1.observation.get'
 	};
 
-	var cache           = {};
-	var consumerOptions = {
-		'name'  : 'responder',
-		'cache' : cache
+	const consumerOptions = {
+		cache,
+		'name' : 'responder'
 	};
 
-	var consumerOrig;
-	var responder;
+	let consumerOrig, responder;
 
 	before( function () {
 		consumerOrig = consumer.__get__( 'Responder' );
@@ -47,8 +45,8 @@ describe( 'Consumer util', function () {
 	} );
 
 	it( 'should return cached responder', function () {
-		var responderCached = consumer.get( options, consumerOptions, sinon.spy() );
+		const responderCached = consumer.get( options, consumerOptions, sinon.spy() );
+
 		expect( responder ).to.be.equal( responderCached );
 	} );
-
 } );

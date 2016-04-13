@@ -1,7 +1,7 @@
 'use strict';
 
-var EventEmitter = require( 'events' ).EventEmitter;
-var util         = require( 'util' );
+const EventEmitter = require( 'events' ).EventEmitter;
+const util         = require( 'util' );
 
 function emit ( emitter, event, params ) {
 	emitter.emit( event, params );
@@ -30,13 +30,14 @@ Consumer.prototype.consumeError = function ( callback ) {
 };
 
 function getNewConsumer ( options, consumer, callback ) {
-	var consumerNew = new Consumer();
+	const consumerNew = new Consumer();
+
 	return consumerNew.consume( callback );
 }
 
 module.exports = {
-	'Producer'       : Producer,
-	'Consumer'       : Consumer,
-	'getNewConsumer' : getNewConsumer
+	Producer,
+	Consumer,
+	getNewConsumer
 };
 

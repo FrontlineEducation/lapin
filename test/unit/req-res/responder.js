@@ -1,20 +1,17 @@
 'use strict';
 
-var expect    = require( 'chai' ).expect;
-var sinon     = require( 'sinon' );
-var Responder = require( process.cwd() + '/lib/req-res/responder' );
+const expect    = require( 'chai' ).expect;
+const sinon     = require( 'sinon' );
+const Responder = require( process.cwd() + '/lib/req-res/responder' );
 
 describe( 'Responder', function () {
-
-	var Lapin;
-	var consumerStub;
+	let Lapin, consumerStub;
 
 	before( function () {
 		Lapin = new Responder( { 'messageType' : 'v1.consumer.verify' } );
 	} );
 
 	describe( 'response', function () {
-
 		before( function () {
 			consumerStub = sinon.stub( Lapin, 'handle', consumerStub );
 			Lapin.consume( sinon.spy() );
@@ -27,8 +24,6 @@ describe( 'Responder', function () {
 		it( 'should call consumerStub only once', function () {
 			expect( consumerStub.calledOnce ).to.equal( true );
 		} );
-
 	} );
-
 } );
 

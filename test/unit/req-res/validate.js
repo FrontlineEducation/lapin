@@ -1,21 +1,19 @@
 'use strict';
 
-/* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var Joi      = require( 'joi' );
-var expect   = require( 'chai' ).expect;
-var validate = require( process.cwd() + '/lib/req-res/validate' );
+const Joi      = require( 'joi' );
+const expect   = require( 'chai' ).expect;
+const validate = require( process.cwd() + '/lib/req-res/validate' );
 
 describe( 'Validation Joi wrapper', function () {
-
-	var requestData = {
+	const requestData = {
 		'username'  : 'Testfoo',
 		'firstname' : 'Test',
 		'lastname'  : 'Foo'
 	};
 
-	var schema = {
+	const schema = {
 		'username'  : Joi.string().required(),
 		'firstname' : Joi.string(),
 		'lastname'  : Joi.string().required(),
@@ -24,41 +22,35 @@ describe( 'Validation Joi wrapper', function () {
 	};
 
 	it( 'should return validated data', function ( done ) {
-
 		validate( {
-			'value'  : requestData,
-			'schema' : schema
+			schema,
+			'value' : requestData
 		} )
 		.then( function ( data ) {
 			expect( requestData.username ).to.equal( data.username );
 			done();
 		} );
-
 	} );
 
 	it( 'should return validation error', function ( done ) {
-
 		validate( {
-			'value'  : { 'username' : 'Testfoo' },
-			'schema' : schema
+			schema,
+			'value' : { 'username' : 'Testfoo' }
 		} )
 		.catch( function ( error ) {
 			expect( error ).to.exist;
 			done();
 		} );
-
 	} );
 
 	it( 'should return error on validation', function ( done ) {
-
 		validate( {
-			'value'  : null,
-			'schema' : schema
+			schema,
+			'value' : null
 		} )
 		.catch( function ( error ) {
 			expect( error ).to.equal( 'Error on validation' );
 			done();
 		} );
-
 	} );
 } );

@@ -1,16 +1,13 @@
 'use strict';
 
-var expect     = require( 'chai' ).expect;
-var sinon      = require( 'sinon' );
-var Subscriber = require( process.cwd() + '/lib/pub-sub/subscriber' );
+const expect     = require( 'chai' ).expect;
+const sinon      = require( 'sinon' );
+const Subscriber = require( process.cwd() + '/lib/pub-sub/subscriber' );
 
 describe( 'Subscriber', function () {
-
-	var Lapin;
-	var consumerStub;
+	let Lapin, consumerStub;
 
 	describe( 'subscribe', function () {
-
 		before( function () {
 			Lapin        = new Subscriber( { 'messageType' : 'v1.consumer.verify' } );
 			consumerStub = sinon.stub( Lapin, 'subscribe', consumerStub );
@@ -24,7 +21,5 @@ describe( 'Subscriber', function () {
 		it( 'should call consumerStub only once', function () {
 			expect( consumerStub.calledOnce ).to.equal( true );
 		} );
-
 	} );
-
 } );

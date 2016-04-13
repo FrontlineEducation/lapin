@@ -1,23 +1,19 @@
 'use strict';
 
-var expect    = require( 'chai' ).expect;
-var sinon     = require( 'sinon' );
-var Publisher = require( process.cwd() + '/lib/pub-sub/publisher' );
+const expect    = require( 'chai' ).expect;
+const sinon     = require( 'sinon' );
+const Publisher = require( process.cwd() + '/lib/pub-sub/publisher' );
 
 describe( 'Publisher', function () {
+	let producerStub, Lapin, producerSpy;
 
-	var producerStub;
-	var producerSpy;
-	var Lapin;
-
-	var messageTest = { 'foo' : 'bar' };
+	const messageTest = { 'foo' : 'bar' };
 
 	before( function () {
 		Lapin = new Publisher( { 'messageType' : 'v1.consumer.verify' } );
 	} );
 
 	describe( 'publish', function () {
-
 		before( function () {
 			producerSpy  = sinon.spy();
 			producerStub = sinon.stub( Lapin, 'publish', producerSpy );
@@ -36,8 +32,6 @@ describe( 'Publisher', function () {
 		it( 'should call producerSpy only once', function () {
 			expect( producerSpy.calledOnce ).to.equal( true );
 		} );
-
 	} );
-
 } );
 

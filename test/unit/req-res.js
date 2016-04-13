@@ -1,19 +1,17 @@
 'use strict';
 
-/* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 /* eslint no-underscore-dangle:0 */
 
-var expect = require( 'chai' ).expect;
-var rewire = require( 'rewire' );
-var ReqRes = rewire( process.cwd() + '/lib/req-res' );
-var helper = require( '../helper' );
+const expect = require( 'chai' ).expect;
+const rewire = require( 'rewire' );
+const ReqRes = rewire( process.cwd() + '/lib/req-res' );
+const helper = require( '../helper' );
 
 describe( 'request and respond', function () {
-
 	describe( 'requester', function () {
-		var Producer;
-		var reqRes;
+		let Producer, reqRes;
+
 		before( function () {
 			reqRes   = new ReqRes();
 			Producer = ReqRes.__get__( 'Requester' );
@@ -37,17 +35,15 @@ describe( 'request and respond', function () {
 				done();
 			} );
 		} );
-
 	} );
 
 	describe( 'responder', function () {
-		var Consumer;
-		var reqRes;
+		let Consumer, reqRes;
 
 		before( function () {
 			reqRes   = new ReqRes();
 			Consumer = ReqRes.__get__( 'consumer' );
-			var consumerHelper = {
+			const consumerHelper = {
 				'get' : helper.getNewConsumer
 			};
 
@@ -71,7 +67,6 @@ describe( 'request and respond', function () {
 				done();
 			} );
 		} );
-
 	} );
 } );
 

@@ -3,15 +3,17 @@
 /* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var _                 = require( 'lodash' );
-var rabbit            = require( 'wascally' );
-var config            = require( process.cwd() + '/test/config' );
-var client            = require( 'net' );
-var timeoutConnection = 3000; // in ms
+const _      = require( 'lodash' );
+const config = require( process.cwd() + '/test/config' );
+const client = require( 'net' );
+
+let rabbit = require( 'wascally' );
+
+// in ms
+const timeoutConnection = 3000;
 
 function configure ( options ) {
-
-	var done = options;
+	let done = options;
 
 	if ( _.has( options, 'done'  ) ) {
 		done = options.done;
@@ -25,16 +27,16 @@ function configure ( options ) {
 		'connection' : config.connection
 	} )
 	.then( function () {
+		const socket = client.createConnection( config.connection.port, config.connection.server );
 
-		var socket = client.createConnection( config.connection.port, config.connection.server );
 		/*
 		in cases host is not reachable and cannot ping
 		rabbitmq.on.failed connection cannot catch that scenario
 		 */
+
 		socket.setTimeout( timeoutConnection, socket.destroy );
 
 		socket
-
 			.once( 'timeout', function () {
 				done( new Error( 'Timeout reached! Failed to connect to the RabbitMQ Server' ) );
 			} )
@@ -44,7 +46,8 @@ function configure ( options ) {
 			} );
 
 		rabbit.connections.default.connection.on( 'failed', function () {
-			var error = new Error( 'Failed to connect to the RabbitMQ Server' );
+			const error = new Error( 'Failed to connect to the RabbitMQ Server' );
+
 			done( error );
 		} );
 

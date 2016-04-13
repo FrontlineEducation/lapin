@@ -1,19 +1,17 @@
 'use strict';
 
-/* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 /* eslint no-underscore-dangle:0 */
 
-var expect  = require( 'chai' ).expect;
-var rewire  = require( 'rewire' );
-var SendRec = rewire( process.cwd() + '/lib/send-rec' );
-var helper  = require( '../helper' );
+const expect  = require( 'chai' ).expect;
+const rewire  = require( 'rewire' );
+const SendRec = rewire( process.cwd() + '/lib/send-rec' );
+const helper  = require( '../helper' );
 
 describe( 'send and receive', function () {
-
 	describe( 'send', function () {
-		var Producer;
-		var sendRec;
+		let Producer, sendRec;
+
 		before( function () {
 			sendRec  = new SendRec();
 			Producer = SendRec.__get__( 'Sender' );
@@ -37,18 +35,19 @@ describe( 'send and receive', function () {
 				done();
 			} );
 		} );
-
 	} );
 
 	describe( 'receive', function () {
-		var Consumer;
-		var sendRec;
+		let Consumer, sendRec;
+
 		before( function () {
 			sendRec            = new SendRec();
 			Consumer           = SendRec.__get__( 'consumer' );
-			var consumerHelper = {
+
+			const consumerHelper = {
 				'get' : helper.getNewConsumer
 			};
+
 			SendRec.__set__( 'consumer', consumerHelper );
 		} );
 
@@ -69,7 +68,6 @@ describe( 'send and receive', function () {
 				done();
 			} );
 		} );
-
 	} );
 } );
 

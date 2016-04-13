@@ -1,13 +1,11 @@
 'use strict';
 
-/* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var expect = require( 'chai' ).expect;
-var mixins = require( process.cwd() + '/lib/util/mixins' );
+const expect = require( 'chai' ).expect;
+const mixins = require( process.cwd() + '/lib/util/mixins' );
 
 describe( 'mixins', function () {
-
 	it( 'should have the required methods', function ( ) {
 		expect( mixins.extract ).to.exist;
 		expect( mixins.cloneDeep ).to.exist;
@@ -17,7 +15,6 @@ describe( 'mixins', function () {
 	} );
 
 	describe( '`extract` method', function () {
-
 		/* eslint-disable no-empty */
 		it( 'should throw error on invalid messageType', function (  ) {
 			try {
@@ -25,7 +22,6 @@ describe( 'mixins', function () {
 				.to
 				.throw( new Error( 'Must have proper message type <version>.<resource>.<action>' ) );
 			} catch ( exception ) { }
-
 		} );
 
 		it( 'should return an object on invalid messageType', function (  ) {
@@ -34,18 +30,17 @@ describe( 'mixins', function () {
 			expect( mixins.extract( 'v1.test.create' ).resource ).to.exist;
 			expect( mixins.extract( 'v1.test.create' ).action ).to.exist;
 		} );
-
 	} );
 
 	it( 'should return null obj when params=null in cloneDeep', function () {
-		var obj = mixins.cloneDeep( null );
+		const obj = mixins.cloneDeep( null );
 
 		expect( obj ).to.not.exists;
 	} );
 
 	it( 'should return cloned obj when in cloneDeep', function () {
-		var paramObj = { 'name' : 'TestFoo' };
-		var obj      = mixins.cloneDeep( paramObj );
+		const paramObj = { 'name' : 'TestFoo' };
+		const obj      = mixins.cloneDeep( paramObj );
 
 		expect( paramObj ).to.not.equal( obj );
 	} );

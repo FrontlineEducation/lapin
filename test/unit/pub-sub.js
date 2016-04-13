@@ -1,19 +1,17 @@
 'use strict';
 
-/* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 /* eslint no-underscore-dangle:0 */
 
-var expect = require( 'chai' ).expect;
-var rewire = require( 'rewire' );
-var PubSub = rewire( process.cwd() + '/lib/pub-sub' );
-var helper = require( '../helper' );
+const expect = require( 'chai' ).expect;
+const rewire = require( 'rewire' );
+const PubSub = rewire( process.cwd() + '/lib/pub-sub' );
+const helper = require( '../helper' );
 
 describe( 'publish and subscribe', function () {
-
 	describe( 'publisher', function () {
-		var Producer;
-		var pubSub;
+		let Producer, pubSub;
+
 		before( function () {
 			pubSub   = new PubSub();
 			Producer = PubSub.__get__( 'Publisher' );
@@ -37,18 +35,19 @@ describe( 'publish and subscribe', function () {
 				done();
 			} );
 		} );
-
 	} );
 
 	describe( 'subscriber', function () {
-		var Consumer;
-		var pubSub;
+		let Consumer, pubSub;
+
 		before( function () {
 			pubSub             = new PubSub();
 			Consumer           = PubSub.__get__( 'consumer' );
-			var consumerHelper = {
+
+			const consumerHelper = {
 				'get' : helper.getNewConsumer
 			};
+
 			PubSub.__set__( 'consumer', consumerHelper );
 		} );
 
@@ -69,7 +68,6 @@ describe( 'publish and subscribe', function () {
 				done();
 			} );
 		} );
-
 	} );
 } );
 

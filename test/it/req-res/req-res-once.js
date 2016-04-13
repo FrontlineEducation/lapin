@@ -1,36 +1,33 @@
 'use strict';
 
-/* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var requireNew = require( 'require-new' );
-var expect     = require( 'chai' ).expect;
+const requireNew = require( 'require-new' );
+const expect     = require( 'chai' ).expect;
 
 describe( 'Perform request respond with once success', function () {
+	const rabbit = requireNew( 'wascally' );
+	const Lapin  = requireNew( process.cwd() );
 
-	var lapin;
-	var rabbit = requireNew( 'wascally' );
-	var Lapin  = requireNew( process.cwd() );
+	let lapin;
 
 	before( function ( done ) {
 		lapin = new Lapin( {
-			'rabbit'  : rabbit,
+			rabbit,
 			'timeout' : {
 				'ms' : 1000
 			}
 		} );
 		require( '../init' )( {
-			'done'   : done,
-			'rabbit' : rabbit
+			done,
+			rabbit
 		} );
 	} );
 
 	describe( '- Only reply once -', function () {
-
-		var response;
+		let response;
 
 		before( function ( done ) {
-
 			lapin.respond( 'v1.reqresonce.get', function ( requestData, send ) {
 				setTimeout( function () {
 					send.success( 'users' );
@@ -42,19 +39,15 @@ describe( 'Perform request respond with once success', function () {
 
 				.on( 'error', done )
 				.on( 'ready', function () {
-
 					lapin.request( 'v1.reqresonce.get', { 'user' : 'Testfoo' }, function ( error, data ) {
 						response = data;
 						done();
 					} );
-
 				} );
 		} );
 
 		it( '-- should receive "users" only', function () {
 			expect( response.data ).to.equal( 'users' );
 		} );
-
 	} );
-
 } );

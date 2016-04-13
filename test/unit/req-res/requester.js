@@ -1,18 +1,15 @@
 'use strict';
 
-var expect    = require( 'chai' ).expect;
-var sinon     = require( 'sinon' );
-var Requester = require( process.cwd() + '/lib/req-res/requester' );
+const expect    = require( 'chai' ).expect;
+const sinon     = require( 'sinon' );
+const Requester = require( process.cwd() + '/lib/req-res/requester' );
 
 describe( 'Requester', function () {
+	let callbackSpy, Lapin, requestStub;
 
-	var callbackSpy;
-	var Lapin;
-	var requestStub;
+	const messageTest = { 'foo' : 'bar' };
 
-	var messageTest = { 'foo' : 'bar' };
-
-	var replies = {
+	const replies = {
 		'success' : {
 			'status' : 'success',
 			'data'   : { 'data' : 'success' }
@@ -36,10 +33,8 @@ describe( 'Requester', function () {
 	} );
 
 	describe( 'requester', function () {
-
 		describe( 'success request', function () {
-
-			var stubRequest = function ( message, reply ) {
+			const stubRequest = function ( message, reply ) {
 				// return a successful reply
 				reply( replies.success );
 			};
@@ -67,13 +62,11 @@ describe( 'Requester', function () {
 
 				done();
 			} );
-
 		} );
 	} );
 
 	describe( 'error request', function () {
-
-		var stubRequest = function ( message, reply ) {
+		const stubRequest = function ( message, reply ) {
 			// return a successful reply
 			reply( replies.error );
 		};
@@ -97,12 +90,10 @@ describe( 'Requester', function () {
 			expect( callbackSpy.calledOnce ).to.equal( true );
 			expect( callbackSpy.calledWith( replies.error, null ) ).to.equal( true );
 		} );
-
 	} );
 
 	describe( 'fail request', function () {
-
-		var stubRequest = function ( message, reply ) {
+		const stubRequest = function ( message, reply ) {
 			// return a successful reply
 			reply( replies.fail );
 		};
@@ -131,6 +122,5 @@ describe( 'Requester', function () {
 			done();
 		} );
 	} );
-
 } );
 

@@ -1,18 +1,16 @@
 'use strict';
 
-/* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var EventEmitter  = require( 'events' ).EventEmitter;
-var expect        = require( 'chai' ).expect;
-var requireNew = require( 'require-new' );
+const EventEmitter = require( 'events' ).EventEmitter;
+const expect       = require( 'chai' ).expect;
+const requireNew   = require( 'require-new' );
 
 describe( 'default logger', function () {
-
-	var defaultlogger = requireNew( process.cwd() + '/lib/logger/defaultlogger' );
-	var emitter       = new EventEmitter();
-	var defaultLogger = defaultlogger( {
-		'emitter' : emitter
+	const defaultlogger = requireNew( process.cwd() + '/lib/logger/defaultlogger' );
+	const emitter       = new EventEmitter();
+	const defaultLogger = defaultlogger( {
+		emitter
 	} );
 
 	it( 'should invoke error', function ( done ) {

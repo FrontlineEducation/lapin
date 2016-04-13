@@ -1,29 +1,26 @@
 'use strict';
 
-/* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var expect     = require( 'chai' ).expect;
-var os         = require( 'os' );
-var requireNew = require( 'require-new' );
-var fs         = require( 'fs' );
-var logger     = require( '@sinet/logger' );
+const expect     = require( 'chai' ).expect;
+const os         = require( 'os' );
+const requireNew = require( 'require-new' );
+const fs         = require( 'fs' );
+const logger     = require( '@sinet/logger' );
 
 describe( 'Logger - Sinet', function () {
+	const logPath = 'logs/sinetLogger.log';
+	const rabbit  = requireNew( 'wascally' );
+	const Lapin   = requireNew( process.cwd() );
 
-	var lapin;
-	var logPath = 'logs/sinetLogger.log';
-	var rabbit  = requireNew( 'wascally' );
-	var Lapin   = requireNew( process.cwd() );
+	let lapin;
 
 	describe( '- Success -', function () {
-
-		var response;
-		var request;
+		let response, request;
 
 		before( function ( done ) {
 			// Options are for winston transports, file and console
-			var options = {
+			const options = {
 				'file' : {
 					'level'    : 'silly',
 					'filename' : logPath
@@ -44,18 +41,17 @@ describe( 'Logger - Sinet', function () {
 			};
 
 			require( '../init' )( {
-				'done'   : done,
-				'rabbit' : rabbit
+				done,
+				rabbit
 			} );
 
 			lapin = new Lapin( {
-				'rabbit' : rabbit,
+				rabbit,
 				'logger' : logger( options )
 			} );
 		} );
 
 		before( function ( done ) {
-
 			lapin.respond( {
 				'messageType' : [ 'v1.logger-test.get', 'v1.logger-test.post' ]
 			}, function ( requestData, send ) {
@@ -65,7 +61,8 @@ describe( 'Logger - Sinet', function () {
 
 				.on( 'error', done )
 				.on( 'ready', function ( responder ) {
-					var messageType = 'v1.logger-test.post';
+					const messageType = 'v1.logger-test.post';
+
 					if ( responder.messageType.slice( 8 ) === messageType ) {
 						lapin.request( messageType, { 'user' : 'Testfoo' }, function ( error, data ) {
 							response      = data;
@@ -76,18 +73,14 @@ describe( 'Logger - Sinet', function () {
 		} );
 
 		it( '-- should receive correct requestData', function () {
-
 			expect( request ).be.an( 'object' );
 			expect( request.user ).to.exist.and.to.equal( 'Testfoo' );
-
 		} );
 
 		it( '-- should return SUCCESS data', function () {
-
 			expect( response ).be.an( 'object' );
 			expect( response.status ).to.exist.and.to.equal( 'success' );
 			expect( response.data.credentials ).to.exist.and.to.equal( 'testfoo123' );
-
 		} );
 
 		it( '-- should have a log file', function ( done ) {
@@ -96,7 +89,5 @@ describe( 'Logger - Sinet', function () {
 				done();
 			} );
 		} );
-
 	} );
-
 } );

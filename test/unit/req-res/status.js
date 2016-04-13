@@ -1,25 +1,20 @@
 'use strict';
 
-/* jshint expr: true */
 /* eslint no-unused-expressions:0 */
 
-var expect  = require( 'chai' ).expect;
-var Emitter = require( 'events' ).EventEmitter;
-describe( 'Req-Res Status', function () {
+const expect  = require( 'chai' ).expect;
+const Emitter = require( 'events' ).EventEmitter;
 
-	var status;
-	var statusError;
-	var statusError2;
-	var statusFail;
-	var response;
+describe( 'Req-Res Status', function () {
+	let status, statusError, statusError2,  statusFail, response;
 
 	before( function () {
-		var respond = function ( data ) {
+		const respond = function ( data ) {
 			response = data;
 		};
 
 		status = require( process.cwd() + '/lib/req-res/status' )( {
-			'respond'        : respond,
+			respond,
 			'timeoutHandler' : require( process.cwd() + '/lib/config' ).timeout,
 			'log'            : require( process.cwd() + '/lib/logger' )( {
 				'emitter' : new Emitter()
@@ -27,7 +22,7 @@ describe( 'Req-Res Status', function () {
 		} );
 
 		statusError = require( process.cwd() + '/lib/req-res/status' )( {
-			'respond'        : respond,
+			respond,
 			'timeoutHandler' : require( process.cwd() + '/lib/config' ).timeout,
 			'log'            : require( process.cwd() + '/lib/logger' )( {
 				'emitter' : new Emitter()
@@ -35,7 +30,7 @@ describe( 'Req-Res Status', function () {
 		} );
 
 		statusError2 = require( process.cwd() + '/lib/req-res/status' )( {
-			'respond'        : respond,
+			respond,
 			'timeoutHandler' : require( process.cwd() + '/lib/config' ).timeout,
 			'log'            : require( process.cwd() + '/lib/logger' )( {
 				'emitter' : new Emitter()
@@ -43,17 +38,17 @@ describe( 'Req-Res Status', function () {
 		} );
 
 		statusFail = require( process.cwd() + '/lib/req-res/status' )( {
-			'respond'        : respond,
+			respond,
 			'timeoutHandler' : require( process.cwd() + '/lib/config' ).timeout,
 			'log'            : require( process.cwd() + '/lib/logger' )( {
 				'emitter' : new Emitter()
 			} )
 		} );
-
 	} );
 
 	it( 'should return success data', function () {
-		var data = { 'user' : 'testfoo' };
+		const data = { 'user' : 'testfoo' };
+
 		status.success( data );
 
 		expect( response ).to.have.property( 'status' );
@@ -64,7 +59,7 @@ describe( 'Req-Res Status', function () {
 	} );
 
 	it( 'should return error data w/ message, errorData and code', function () {
-		var error = new Error( 'Internal Server Error' );
+		const error = new Error( 'Internal Server Error' );
 
 		statusError.error( error.message, error, 404 );
 
@@ -80,7 +75,7 @@ describe( 'Req-Res Status', function () {
 	} );
 
 	it( 'should return error data w/ message', function () {
-		var error = 'Internal Server Error';
+		const error = 'Internal Server Error';
 
 		statusError2.error( 'Internal Server Error' );
 
@@ -96,7 +91,8 @@ describe( 'Req-Res Status', function () {
 	} );
 
 	it( 'should return fail data', function () {
-		var data = 'Invalid data';
+		const data = 'Invalid data';
+
 		statusFail.fail( data );
 
 		expect( response ).to.have.property( 'status' );
@@ -105,5 +101,4 @@ describe( 'Req-Res Status', function () {
 		expect( response.status ).to.equal( 'fail' );
 		expect( response.data ).to.equal( data );
 	} );
-
 } );
