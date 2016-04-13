@@ -2,22 +2,22 @@
 
 /* eslint no-process-exit:0 */
 
-var colors      = require( 'colors/safe' );
-var del         = require( 'del' );
-var enforcement = require( '@sinet/coverage-enforcement' );
-var gulp        = require( 'gulp' );
-var istanbul    = require( 'gulp-istanbul' );
-var mocha       = require( 'gulp-mocha' );
-var mkdirp      = require( 'mkdirp' );
+const colors      = require( 'colors/safe' );
+const del         = require( 'del' );
+const enforcement = require( '@sinet/coverage-enforcement' );
+const gulp        = require( 'gulp' );
+const istanbul    = require( 'gulp-istanbul' );
+const mocha       = require( 'gulp-mocha' );
+const mkdirp      = require( 'mkdirp' );
 
 gulp.task( 'clean-coverage', function () {
 	del( [ 'instrumented' ] );
 } );
 
 gulp.task( 'test', [ 'clean-coverage', 'create-log-dir' ], function () {
-	var covEnforcerOpts = { 'thresholds' : enforcement.thresholds };
+	const covEnforcerOpts = { 'thresholds' : enforcement.thresholds };
 
-	var paths = {
+	const paths = {
 		'cover' : [
 
 			// Include everything to be covered
@@ -38,7 +38,7 @@ gulp.task( 'test', [ 'clean-coverage', 'create-log-dir' ], function () {
 		'coverage' : 'instrumented'
 	};
 
-	var mochaOptions = {
+	const mochaOptions = {
 		'ui'       : 'bdd',
 		'reporter' : 'spec',
 		'bail'     : true,
@@ -50,7 +50,6 @@ gulp.task( 'test', [ 'clean-coverage', 'create-log-dir' ], function () {
 		.pipe( istanbul.hookRequire() )
 
 		.on( 'finish', function () {
-
 			gulp.src( paths.test, { 'read' : false } )
 
 				.pipe(
@@ -92,7 +91,6 @@ gulp.task( 'test', [ 'clean-coverage', 'create-log-dir' ], function () {
 } );
 
 gulp.task( 'create-log-dir', function ( callback ) {
-
 	mkdirp( 'logs', function ( error ) {
 		if ( error ) {
 			console.log( error.stack );
@@ -100,23 +98,19 @@ gulp.task( 'create-log-dir', function ( callback ) {
 		}
 		callback();
 	} );
-
 } );
 
 gulp.task( 'inspect-queues', function () {
-
 	// delay to give time reading queues
 	setTimeout( function () {
-
-		var spawn = require( 'child_process' ).spawn;
-		var queue = spawn( 'node', [ 'test/api' ] );
+		const spawn = require( 'child_process' ).spawn;
+		const queue = spawn( 'node', [ 'test/api' ] );
 
 		queue.stdout.on( 'data', function ( data ) {
 			console.log( data.toString() );
 		} );
 
 		queue.stderr.on( 'data', function ( data ) {
-
 			if ( parseInt( data.toString(), 10 ) ) {
 				console.log( colors.red( 'error - having unacked/ready msgs' ) );
 			} else {
@@ -124,7 +118,5 @@ gulp.task( 'inspect-queues', function () {
 			}
 			process.exit( data );
 		} );
-
 	}, 2000 );
-
 } );
