@@ -362,4 +362,63 @@ describe( 'Perform request respond', function () {
 			expect( failData.data ).to.exist.and.to.equal( 'Invalid data' );
 		} );
 	} );
+
+	describe( '- Error with the responder code -', function () {
+		let errorData, response;
+
+		before( function ( done ) {
+			lapin.respond( 'v1.reqrestest.errorcode', function () {
+				/* eslint no-undef:0 */
+				sdf;
+			} )
+				.on( 'error', done )
+				.on( 'ready', function () {
+					lapin.request( 'v1.reqrestest.errorcode', { 'user' : 'Foo' }, function ( error, data ) {
+						response  = data;
+						errorData = error;
+						setTimeout( done, 1000 );
+					} );
+				} );
+		} );
+
+		it( '-- should have a null response', function () {
+			expect( response ).to.be.an( 'null' );
+		} );
+
+		it( '-- should received an errorData in request', function () {
+			expect( errorData ).be.an( 'object' );
+			expect( errorData.status ).to.exist.and.to.equal( 'error' );
+			expect( errorData.data ).to.exist;
+			expect( errorData.message ).to.exist;
+		} );
+	} );
+
+	describe( '- Error with the responder code -', function () {
+		let errorData, response;
+
+		before( function ( done ) {
+			lapin.respond( 'v1.reqrestest.errorcode-hello', function () {
+				/* eslint no-undef:0 */
+				throw 'hello';
+			} )
+				.on( 'error', done )
+				.on( 'ready', function () {
+					lapin.request( 'v1.reqrestest.errorcode-hello', { 'user' : 'Foo' }, function ( error, data ) {
+						response  = data;
+						errorData = error;
+						setTimeout( done, 1000 );
+					} );
+				} );
+		} );
+
+		it( '-- should have a null response', function () {
+			expect( response ).to.be.an( 'null' );
+		} );
+
+		it( '-- should received an errorData in request', function () {
+			expect( errorData ).be.an( 'object' );
+			expect( errorData.status ).to.exist.and.to.equal( 'error' );
+			expect( errorData.data ).to.exist;
+		} );
+	} );
 } );

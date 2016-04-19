@@ -20,17 +20,16 @@ npm install lapin
 Require lapin and wascally:
 
 ```javascript
-var rabbit = require( 'wascally' );
-var lapin  = require( 'lapin' )( rabbit );
+const rabbit = require( 'wascally' );
+const lapin  = require( 'lapin' )( rabbit );
 
 // or
 
-var options = {
-	'logger' : logger,
-	'rabbit' : wascally
+const options = {
+	logger, rabbit
 };
 
-var lapin = require( 'lapin' )( options )
+const lapin = require( 'lapin' )( options )
 ```
 
 The following are simple usage examples:

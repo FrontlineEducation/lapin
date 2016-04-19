@@ -49,7 +49,7 @@ describe( 'Validation Joi wrapper', function () {
 			'value' : null
 		} )
 		.catch( function ( error ) {
-			expect( error ).to.equal( 'Error on validation' );
+			expect( error ).to.not.null;
 			done();
 		} );
 	} );
