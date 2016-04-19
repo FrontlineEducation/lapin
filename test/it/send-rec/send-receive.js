@@ -2,6 +2,7 @@
 
 /* eslint no-unused-expressions:0 */
 
+const sinon      = require( 'sinon' );
 const requireNew = require( 'require-new' );
 const expect     = require( 'chai' ).expect;
 
@@ -10,9 +11,16 @@ describe( 'Perform Send Receive', function () {
 	const Lapin  = requireNew( process.cwd() );
 
 	let lapin;
+	const logger = {
+		error () {
+			console.log( 'Error log' );
+		}
+	};
 
 	before( function ( done ) {
-		lapin  = new Lapin( rabbit );
+		lapin  = new Lapin( {
+			rabbit, logger
+		} );
 		require( '../init' )( {
 			done,
 			rabbit
@@ -176,6 +184,29 @@ describe( 'Perform Send Receive', function () {
 				expect( error ).to.be.instanceOf.Error;
 				done();
 			}
+		} );
+	} );
+
+	describe( 'Code error in Receiver', function () {
+		const spy = sinon.spy( logger, 'error' );
+
+		this.timeout( 6000 );
+		before( function ( done ) {
+			lapin.receive( 'v1.sendrec.error-code', function () {
+				/* eslint no-undef:0 */
+				error;
+			} )
+				.on( 'ready', function () {
+					lapin.send( 'v1.sendrec.error-code', { 'user' : 'Foo' }, function () {
+						setTimeout( function () {
+							done();
+						}, 2000 );
+					} );
+				} );
+		} );
+
+		it( '-- should have a null response', function () {
+			expect( spy.called ).to.be.equal( true );
 		} );
 	} );
 } );

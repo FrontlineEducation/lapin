@@ -25,4 +25,24 @@ describe( 'Receiver', function () {
 			expect( consumerStub.calledOnce ).to.equal( true );
 		} );
 	} );
+
+	describe( 'receive emit error', function () {
+		const spy = sinon.spy( console, 'log' );
+
+		before( function () {
+			consumerStub = sinon.stub( Lapin, 'receive', consumerStub );
+			Lapin.consume( sinon.spy() );
+			Lapin.emit( 'error' );
+		} );
+
+		after( function () {
+			consumerStub.restore();
+			spy.reset();
+		} );
+
+		it( 'should call cosumer only once', function () {
+			expect( consumerStub.calledOnce ).to.equal( true );
+			expect( spy.called ).to.equal( true );
+		} );
+	} );
 } );
