@@ -299,7 +299,7 @@ lapin.[ respond | receive ]( options, function ( message, send ) {
 Please refer to [JSEND](http://labs.omniti.com/labs/jsend) for standard reply attributes
 
 ## Contributing
-All pull requests must follow [coding conventions and standards](https://github.com/School-Improvement-Network/coding-conventions).
+All pull requests must follow [coding conventions and standards](https://github.com/sinet/coding-conventions).
 
 
 ## Additional Information
