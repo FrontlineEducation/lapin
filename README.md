@@ -1,5 +1,10 @@
 ## Lapin wrapper for [RabbitMQ](http://rabbitmq.com/)
 
+[![Version npm](https://img.shields.io/npm/v/lapin.svg?style=flat)](https://www.npmjs.com/package/lapin)
+[![npm Downloads](https://img.shields.io/npm/dm/lapin.svg?style=flat)](https://www.npmjs.com/package/lapin)
+[![Dependencies](https://img.shields.io/david/sinet/lapin.svg?style=flat)](https://david-dm.org/sinet/lapin)
+[![Dependencies](https://img.shields.io/david/dev/sinet/lapin.svg?style=flat)](https://david-dm.org/sinet/lapin)
+
 Currently this project is using [Rabbus](https://github.com/derickbailey/rabbus) and [Wascally](https://github.com/LeanKit-Labs/wascally). This project is aiming to support several producer / consumer patterns. The following are is a list of the planned patterns, and the checked ones are currently implemented:
 
 * [X] Send / Receive
