@@ -5,7 +5,7 @@
 [![Dependencies](https://img.shields.io/david/sinet/lapin.svg?style=flat)](https://david-dm.org/sinet/lapin)
 [![Dependencies](https://img.shields.io/david/dev/sinet/lapin.svg?style=flat)](https://david-dm.org/sinet/lapin)
 
-Currently this project is using [Rabbus](https://github.com/derickbailey/rabbus) and [Wascally](https://github.com/LeanKit-Labs/wascally). This project is aiming to support several producer / consumer patterns. The following are is a list of the planned patterns, and the checked ones are currently implemented:
+Currently this project is using [Rabbus](https://github.com/derickbailey/rabbus) and [Rabbot](https://github.com/arobson/rabbot). [Wascally](https://github.com/LeanKit-Labs/wascally) can also be used instead of rabbot. This project is aiming to support several producer / consumer patterns. The following are is a list of the planned patterns, and the checked ones are currently implemented:
 
 * [X] Send / Receive
 * [X] Publish / Subscribe
@@ -15,17 +15,17 @@ The [JSend](http://labs.omniti.com/labs/jsend) specification is required to dete
 
 ## Installation and Usage
 
-As lapin uses wascally you need to install it along with lapin:
+As lapin uses rabbot you need to install it along with lapin:
 
 ```bash
-npm install wascally
+npm install rabbot
 npm install lapin
 ```
 
-Require lapin and wascally:
+Require lapin and rabbot:
 
 ```javascript
-const rabbit = require( 'wascally' );
+const rabbit = require( 'rabbot' );
 const lapin  = require( 'lapin' )( rabbit );
 
 // or

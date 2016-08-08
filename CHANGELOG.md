@@ -1,3 +1,15 @@
+### 6.0.2
+- Update test and ReadMe using rabbot instead of wascally
+- Fix rabbot issue with publishing array
+
+### 6.0.1
+- Update dependencies
+
+### 6.0.0
+- Update node support to node 6
+- Refactor code to some ES2015 conventions
+- Fix timeouts in responder
+
 ### 5.0.0
 - Change `Receiver` parameter from callback to send object
 
