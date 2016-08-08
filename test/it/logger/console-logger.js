@@ -8,7 +8,7 @@ const requireNew = require( 'require-new' );
 
 describe( 'Logger - Console Log', function () {
 	const logPath = 'logs/consoleLog.log';
-	const rabbit  = requireNew( 'wascally' );
+	const rabbit  = requireNew( 'rabbot' );
 
 	let lapin;
 	let Lapin   = requireNew( process.cwd() );

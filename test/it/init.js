@@ -7,10 +7,10 @@ const _      = require( 'lodash' );
 const config = require( process.cwd() + '/test/config' );
 const client = require( 'net' );
 
-let rabbit = require( 'wascally' );
+let rabbit = require( 'rabbot' );
 
 // in ms
-const timeoutConnection = 3000;
+const timeoutConnection = 4000;
 
 function configure ( options ) {
 	let done = options;
@@ -23,42 +23,39 @@ function configure ( options ) {
 		rabbit = options.rabbit;
 	}
 
-	rabbit.configure( {
-		'connection' : config.connection
-	} )
-	.then( function () {
-		const socket = client.createConnection( config.connection.port, config.connection.server );
+	const socket = client.createConnection( config.connection.port, config.connection.server );
 
-		/*
-		in cases host is not reachable and cannot ping
-		rabbitmq.on.failed connection cannot catch that scenario
-		 */
+	/*
+	in cases host is not reachable and cannot ping
+	rabbitmq.on.failed connection cannot catch that scenario
+	 */
 
-		socket.setTimeout( timeoutConnection, socket.destroy );
+	socket.setTimeout( timeoutConnection, socket.destroy );
 
-		socket
-			.once( 'timeout', function () {
-				done( new Error( 'Timeout reached! Failed to connect to the RabbitMQ Server' ) );
-			} )
-			.once( 'error', function ( error ) {
-				socket.destroy();
-				done( error );
-			} );
-
-		rabbit.connections.default.connection.on( 'failed', function () {
-			const error = new Error( 'Failed to connect to the RabbitMQ Server' );
-
+	socket
+		.once( 'timeout', function () {
+			done( new Error( 'Timeout reached! Failed to connect to the RabbitMQ Server' ) );
+		} )
+		.once( 'error', function ( error ) {
+			socket.destroy();
 			done( error );
 		} );
 
-		rabbit.connections.default.connection.on( 'connected', function () {
-			console.log( '--- Connected to RabbitMQ Server ---' );
-			socket.destroy();
-			done();
-		} );
+	let connection = _.defaults( config.connection, {
+		'publishTimeout' : 40000,
+		'replyTimeout'   : 45000
+	} );
+
+	rabbit.configure( {
+		connection
 	} )
-	.then( null, function ( configureError ) {
-		done( configureError );
+	.then( function () {
+		console.log( '--- Connected to RabbitMQ Server ---' );
+		socket.destroy();
+		done();
+	} )
+	.catch( ()  => {
+		done( new Error( 'Failed to connect to the RabbitMQ Server' ) );
 	} );
 }
 

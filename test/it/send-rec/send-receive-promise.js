@@ -6,7 +6,7 @@ const requireNew = require( 'require-new' );
 const expect     = require( 'chai' ).expect;
 
 describe( 'Perform Send( PROMISE ) Receive', function () {
-	const rabbit  = requireNew( 'wascally' );
+	const rabbit  = requireNew( 'rabbot' );
 	const Lapin   = requireNew( process.cwd() );
 	const payload = { 'user' : 'Testfoo' };
 

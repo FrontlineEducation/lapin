@@ -4,13 +4,13 @@ const requireNew = require( 'require-new' );
 const expect     = require( 'chai' ).expect;
 const config     = require( process.cwd() + '/lib/config' );
 
-describe( 'lapin with wascally', function () {
-	const wascally = requireNew( 'wascally' );
+describe( 'lapin with rabbot', function () {
+	const rabbot = requireNew( 'rabbot' );
 
 	let lapin;
 
 	before( function () {
-		lapin = require( process.cwd() )( wascally );
+		lapin = require( process.cwd() )( rabbot );
 	} );
 
 	it( '-- should have proper attributes', function () {
@@ -36,7 +36,7 @@ describe( 'lapin with wascally', function () {
 	} );
 
 	it( '-- should return a singleton lapin object', function () {
-		const anotherLapin = require( process.cwd() )( wascally );
+		const anotherLapin = require( process.cwd() )( rabbot );
 
 		expect( anotherLapin ).to.equal( lapin );
 	} );
@@ -52,19 +52,19 @@ describe( 'lapin with no options', function () {
 	} );
 } );
 
-describe( 'lapin as object with wascally without logger', function () {
-	const wascally = requireNew( 'wascally' );
+describe( 'lapin as object with rabbot without logger', function () {
+	const rabbot = requireNew( 'rabbot' );
 
 	before( function () {
-		requireNew( process.cwd() + '/index' )( { 'rabbit' : wascally } );
+		requireNew( process.cwd() + '/index' )( { 'rabbit' : rabbot } );
 	} );
 
 	it( '-- should use the same rabbit', function () {
-		expect( config.rabbit ).equal( wascally );
+		expect( config.rabbit ).equal( rabbot );
 	} );
 } );
 
-describe( 'lapin with logger as options without wascally', function () {
+describe( 'lapin with logger as options without rabbot', function () {
 	it( '-- should throw error', function () {
 		try {
 			requireNew( process.cwd() + '/index' )( { 'logger' : console.log } );
@@ -74,8 +74,8 @@ describe( 'lapin with logger as options without wascally', function () {
 	} );
 } );
 
-describe( 'lapin with logger and wascally', function () {
-	const rabbit = requireNew( 'wascally' );
+describe( 'lapin with logger and rabbot', function () {
+	const rabbit = requireNew( 'rabbot' );
 
 	before( function () {
 		requireNew( process.cwd() + '/index' )( {
@@ -104,7 +104,7 @@ describe( 'lapin with other options only logger', function () {
 } );
 
 describe( 'lapin with rabbit with other options', function () {
-	const rabbit = requireNew( 'wascally' );
+	const rabbit = requireNew( 'rabbot' );
 
 	before( function () {
 		requireNew( process.cwd() + '/index' )( {

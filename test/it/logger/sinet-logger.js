@@ -10,7 +10,7 @@ const logger     = require( '@sinet/logger' );
 
 describe( 'Logger - Sinet', function () {
 	const logPath = 'logs/sinetLogger.log';
-	const rabbit  = requireNew( 'wascally' );
+	const rabbit  = requireNew( 'rabbot' );
 	const Lapin   = requireNew( process.cwd() );
 
 	let lapin;

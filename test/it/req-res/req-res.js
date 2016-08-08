@@ -7,7 +7,7 @@ const expect     = require( 'chai' ).expect;
 const Joi        = require( 'joi' );
 
 describe( 'Perform request respond', function () {
-	const rabbit = requireNew( 'wascally' );
+	const rabbit = requireNew( 'rabbot' );
 	const Lapin  = requireNew( process.cwd() );
 	let lapin;
 
