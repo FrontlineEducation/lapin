@@ -4,6 +4,7 @@
   "description": "RPC library for AMQP protocol",
   "main": "index.js",
   "scripts": {
+    "prepublish": "npm prune",
     "test": "gulp test && gulp inspect-queues",
     "eslint": "eslint",
     "jscs": "jscs",
