@@ -1,3 +1,6 @@
+### 6.0.3
+- Listen to requester error and log it
+
 ### 6.0.2
 - Update test and ReadMe using rabbot instead of wascally
 - Fix rabbot issue with publishing array
