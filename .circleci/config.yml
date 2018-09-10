@@ -1,0 +1,118 @@
+version: 2
+
+references:
+  container_config: &container_config
+    working_directory: ~/sinet/lapin
+    docker:
+      - image: circleci/node:8-jessie-browsers
+    environment:
+      CIRCLE_ARTIFACTS: /tmp/circleci-artifacts
+      CIRCLE_TEST_REPORTS: /tmp/circleci-test-results
+
+  install_json: &install_json
+    run:
+      name: Install JSON.sh
+      command: sudo npm install -g JSON.sh
+
+  load: &load
+    attach_workspace:
+      at: ~/sinet/lapin
+
+  save: &save
+    persist_to_workspace:
+      root: ~/sinet/lapin
+      paths:
+        - .
+
+jobs:
+  checkout_code:
+    <<: *container_config
+    steps:
+      - checkout
+      - *save
+
+  install_deps:
+    <<: *container_config
+    steps:
+      - *load
+      - setup_remote_docker
+      - restore_cache:
+          keys:
+            - node-v1-{{ .Branch }}-{{ checksum "npm-shrinkwrap.json" }}
+            - node-v1-{{ .Branch }}-
+            - node-v1-
+      - run:
+          name: Installing Dependencies
+          command: npm install
+      - run:
+          name: Setup rabbitmq
+          command: echo 127.0.0.1 rabbitmq | sudo tee -a /etc/hosts
+      - save_cache:
+          paths:
+            - node_modules
+          key: node-v1-{{ .Branch }}-{{ checksum "npm-shrinkwrap.json" }}
+      - *save
+
+  build:
+    <<: *container_config
+    steps:
+      - *load
+      - setup_remote_docker
+      - run:
+          name: Creating Cache Directory
+          command: mkdir circle-cache
+      - restore_cache:
+          keys:
+            - v1-repo-{{ .Branch }}-{{ .Revision }}-docker-image
+      - save_cache:
+          key: v1-repo-{{ .Branch }}-{{ .Revision }}-docker-image
+          paths:
+            - circle-cache
+      - *save
+
+  lint:
+    <<: *container_config
+    steps:
+      - *load
+      - run:
+          name: Detect errors and potential problems
+          command: |
+            npm run eslint -- ./
+            npm run jscs -- --esnext ./
+
+
+  unit_test:
+    <<: *container_config
+    steps:
+      - setup_remote_docker
+      - *load
+      - attach_workspace:
+          at: ~/sinet/lapin
+      - run:
+          name: Start rabbitmq
+          command: docker run -d -p 15672:15672 --name rabbitmq rabbitmq:3.5-management
+      - run:
+          name: Executing Tests
+          command: npm test
+      - store_test_results:
+          path: /tmp/circleci-test-results
+
+workflows:
+  version: 2
+
+  pull_request:
+    jobs:
+      - checkout_code
+      - install_deps:
+          requires:
+            - checkout_code
+      - build:
+          requires:
+            - install_deps
+      - lint:
+          requires:
+            - install_deps
+      - unit_test:
+          requires:
+            - build
+            - lint
