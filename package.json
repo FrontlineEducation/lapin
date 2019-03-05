@@ -1,6 +1,6 @@
 {
   "name": "lapin",
-  "version": "6.1.0",
+  "version": "6.1.1",
   "description": "RPC library for AMQP protocol",
   "main": "index.js",
   "scripts": {
@@ -25,28 +25,28 @@
     "bluebird": "3.4.1",
     "joi": "9.0.4",
     "lodash": "4.14.0",
-    "rabbus": "^0.3.0"
+    "rabbus": "0.3.0"
   },
   "devDependencies": {
-    "@sinet/coding-conventions": "^2.1.1",
-    "@sinet/coverage-enforcement": "^1.2.0",
-    "@sinet/logger": "^1.0.1",
-    "chai": "^3.2.0",
-    "cli-table": "^0.3.1",
-    "colors": "^1.1.2",
-    "del": "^1.2.0",
-    "eslint": "^1.10.3",
-    "gulp": "^3.9.0",
-    "gulp-istanbul": "^0.10.0",
-    "gulp-mocha": "^2.1.3",
-    "jscs": "^2.11.0",
-    "mkdirp": "^0.5.1",
-    "mocha": "^2.2.5",
+    "@sinet/coding-conventions": "2.1.1",
+    "@sinet/coverage-enforcement": "1.2.0",
+    "@sinet/logger": "1.0.1",
+    "chai": "3.2.0",
+    "cli-table": "0.3.1",
+    "colors": "1.1.2",
+    "del": "1.2.0",
+    "eslint": "1.10.3",
+    "gulp": "3.9.0",
+    "gulp-istanbul": "0.10.0",
+    "gulp-mocha": "2.1.3",
+    "jscs": "2.11.0",
+    "mkdirp": "0.5.1",
+    "mocha": "2.2.5",
     "nsp": "2.0.0",
-    "rabbot": "^1.0.5",
-    "request": "^2.60.0",
-    "require-new": "^1.1.0",
-    "rewire": "^2.3.4",
-    "sinon": "^1.12.2"
+    "rabbot": "1.0.5",
+    "request": "2.60.0",
+    "require-new": "1.1.0",
+    "rewire": "2.3.4",
+    "sinon": "1.12.2"
   }
 }
